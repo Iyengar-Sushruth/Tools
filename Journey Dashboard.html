@@ -1,0 +1,488 @@
+<html data-type="html" data-identifier="5cd10817-76cb-41ba-8b9e-5e0cb2825690" data-title="EMpower Engine Dashboard - Static HTML" data-version="1" width="1200" height="800"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMpower Engine - Campaign Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --bg-dark: #0f1014;
+            --card-bg: #18191e;
+            --card-hover: #1f2128;
+            --accent: #F47920;
+            --accent-glow: rgba(244, 121, 32, 0.2);
+            --text-main: #ffffff;
+            --text-muted: #8b92a5;
+            --border: #2d303a;
+            --success: #00d1b2;
+            --warning: #ffdd57;
+            --danger: #ff5b5b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            color: var(--text-main);
+            line-height: 1.5;
+            padding-bottom: 50px;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        .hero-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+            background: radial-gradient(circle at top center, #252830 0%, var(--bg-dark) 70%);
+            min-height: 200px;
+        }
+        .hero-content { text-align: left; flex: 1; }
+        .hero-title { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; }
+        .hero-subtitle { color: var(--text-muted); font-size: 16px; font-weight: 400; }
+
+        .hero-chart-container { width: 200px; height: 200px; position: relative; }
+        .hero-chart-wrapper { width: 100%; height: 100%; position: relative; }
+        .hero-chart-center {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            text-align: center; pointer-events: none;
+        }
+        .hero-chart-center .total-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .hero-chart-center .total-value { font-size: 18px; font-weight: 700; color: #fff; }
+
+        .control-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(24, 25, 30, 0.7); backdrop-filter: blur(10px);
+            border: 1px solid var(--border); border-radius: 16px;
+            padding: 15px 25px; margin-bottom: 20px;
+            position: sticky; top: 20px; z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            flex-wrap: wrap; gap: 15px;
+        }
+        
+        .stat-pill { display: flex; align-items: center; gap: 12px; }
+        .stat-val { font-size: 24px; font-weight: 700; color: darkorange; line-height: 1; }
+        .stat-lbl { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+        .filter-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+        .market-select {
+            background: #111; border: 1px solid var(--border);
+            padding: 10px 12px; border-radius: 8px; color: #fff;
+            font-size: 13px; min-width: 130px; cursor: pointer;
+            transition: all 0.3s; appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238b92a5%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 10px top 50%; background-size: 10px auto;
+        }
+        .market-select:focus { border-color: var(--accent); outline: none; }
+
+        .search-wrapper { position: relative; }
+        .search-wrapper input {
+            background: #111; border: 1px solid var(--border);
+            padding: 10px 12px 10px 35px; border-radius: 8px;
+            color: #fff; font-size: 13px; width: 200px; transition: all 0.3s;
+        }
+        .search-wrapper input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-glow); outline: none; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; }
+
+        .btn { border: 1px solid var(--border); cursor: pointer; font-size: 12px; padding: 10px 15px; border-radius: 8px; transition: 0.2s; font-weight: 500; }
+        .reset-btn { background: none; color: var(--text-muted); }
+        .reset-btn:hover { color: var(--accent); border-color: var(--accent); }
+        .export-btn { background: none; color: var(--text-muted); }
+        .export-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+        .global-stats-container { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px; }
+
+        .gs-card {
+            background: linear-gradient(145deg, #1e2026, #18191e);
+            border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; text-align: center; position: relative;
+            overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .gs-card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--accent); opacity: 0.5; }
+        .gs-val { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 5px; line-height: 1.2; }
+        .gs-sub { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 5px; }
+        .gs-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .gs-card.rate-good::after { background: var(--success); }
+        .gs-card.rate-good .gs-sub { color: var(--success); }
+        .gs-card.rate-warning::after { background: var(--warning); }
+        .gs-card.rate-warning .gs-sub { color: var(--warning); }
+        .gs-card.rate-danger::after { background: var(--danger); }
+        .gs-card.rate-danger .gs-sub { color: var(--danger); }
+
+        .journey-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 12px; margin-bottom: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            overflow: hidden;
+        }
+        .journey-card:hover { border-color: #444; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .journey-card.hidden { display: none; }
+
+        .card-main {
+            display: grid; grid-template-columns: 35% 20% 20% 20% 5%;
+            align-items: center; padding: 20px 25px; cursor: pointer;
+            position: relative; min-height: 90px;
+        }
+        .card-main::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: transparent; transition: 0.3s; }
+        .journey-card.active .card-main { background: #202229; }
+        .journey-card.active .card-main::before { background: var(--accent); }
+
+        .jc-identity h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; line-height: 1.4; }
+        .version-badge { background: #2a2d36; color: var(--text-muted); font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 600; display: inline-block; margin-left: 8px; }
+        .market-badge { background: rgba(244, 121, 32, 0.15); color: var(--accent); border: 1px solid rgba(244, 121, 32, 0.3); font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; display: inline-block; margin-left: 5px; text-transform: uppercase; }
+        .jc-meta { font-size: 12px; color: var(--text-muted); font-family: monospace; display: flex; align-items: center; gap: 6px; }
+        
+        .jc-stat { text-align: left; display: flex; flex-direction: column; justify-content: center; border-left: 1px solid #2d303a; padding-left: 20px; }
+        .jc-stat .lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .jc-stat .val { font-size: 18px; font-weight: 700; color: #fff; }
+        .jc-action { display: flex; justify-content: flex-end; align-items: center; }
+        .jc-stat .rate { color: var(--accent); }
+        .jc-stat .rate.rate-good { color: var(--success); }
+        .jc-stat .rate.rate-warning { color: var(--warning); }
+        .jc-stat .rate.rate-danger { color: var(--danger); }
+
+        .toggle-icon { width: 32px; height: 32px; border-radius: 50%; background: #252830; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: 0.3s; }
+        .journey-card.active .toggle-icon { background: var(--accent); color: #fff; transform: rotate(180deg); }
+
+        .card-details { display: none; background: #131418; border-top: 1px solid var(--border); }
+        .journey-card.active .card-details { display: block; padding: 30px; }
+
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr) 1.5fr; gap: 15px; margin-bottom: 30px; }
+        .kpi-box { background: #1c1e24; border: 1px solid #2a2d36; border-radius: 8px; padding: 15px 20px; text-align: center; }
+        .kpi-box .num { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+        .kpi-box .sub { font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px; }
+        .kpi-box .sub.rate-good { color: var(--success); }
+        .kpi-box .sub.rate-warning { color: var(--warning); }
+        .kpi-box .sub.rate-danger { color: var(--danger); }
+        .kpi-box .txt { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+
+        .health-box { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 0 20px; border-left: 1px solid #333; }
+        .risk-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+        .risk-val { color: var(--danger); font-weight: 700; }
+        .risk-val.rate-good { color: var(--success); }
+        .risk-val.rate-warning { color: var(--warning); }
+        .risk-val.rate-danger { color: var(--danger); }
+
+        .timeline-header { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 15px; padding-left: 10px; border-left: 3px solid var(--accent); }
+        .timeline-item { display: flex; gap: 20px; position: relative; padding-bottom: 20px; }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .t-line { display: flex; flex-direction: column; align-items: center; width: 40px; min-width: 40px; }
+        .t-dot { width: 12px; height: 12px; background: #333; border: 2px solid var(--text-muted); border-radius: 50%; z-index: 2; margin-top: 24px; }
+        .t-connector { flex: 1; width: 2px; background: #252830; margin-top: -2px; margin-bottom: -10px; }
+        .timeline-item:last-child .t-connector { display: none; }
+
+        .email-card { flex: 1; background: #1a1c22; border: 1px solid #2d303a; border-radius: 8px; padding: 20px; display: flex; align-items: flex-start; transition: 0.2s; }
+        .email-card:hover { border-color: #555; background: #1e2026; }
+        .ec-info { flex: 1.5; padding-right: 20px; border-right: 1px solid #2d303a; }
+        .ec-name { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .ec-subject { font-size: 13px; color: #ccc; margin-bottom: 12px; display: block; }
+        .sender-block { background: #23252b; padding: 8px 12px; border-radius: 6px; display: inline-block; }
+        .sb-row { display: flex; align-items: center; gap: 8px; font-size: 11px; margin-bottom: 4px; color: #bbb; }
+        .sb-row:last-child { margin-bottom: 0; }
+        .sb-row .icon { opacity: 0.5; }
+        .sb-email { font-family: monospace; color: #888; }
+        .ec-metrics { flex: 3; display: flex; justify-content: space-around; align-items: center; }
+        .ec-stat .n { font-size: 16px; font-weight: 700; color: #eee; }
+        .ec-stat .r { font-size: 11px; font-weight: 600; color: var(--accent); display: block; }
+        .ec-stat .r.rate-good { color: var(--success); }
+        .ec-stat .r.rate-warning { color: var(--warning); }
+        .ec-stat .r.rate-danger { color: var(--danger); }
+        .ec-stat .l { font-size: 10px; color: #666; text-transform: uppercase; margin-top: 4px; display: block; }
+
+        .ec-chart { flex: 1; padding-left: 20px; border-left: 1px solid #2d303a; min-width: 120px; }
+        .mini-chart-container { height: 60px; }
+
+        .journey-chart-container { background: #1c1e24; border: 1px solid #2a2d36; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .journey-chart-container h4 { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .journey-chart-wrapper { height: 180px; position: relative; }
+
+        .no-data { padding: 50px; text-align: center; color: #555; }
+
+        .load-more-btn {
+            display: block; width: 100%; padding: 18px;
+            background: linear-gradient(145deg, #1e2026, #18191e);
+            border: 1px solid var(--border); border-radius: 12px;
+            color: var(--accent); font-size: 15px; font-weight: 600;
+            cursor: pointer; margin-top: 20px; transition: all 0.3s;
+        }
+        .load-more-btn:hover { background: #252830; border-color: var(--accent); }
+
+        @media (max-width: 900px) {
+            .hero-section { flex-direction: column; text-align: center; gap: 20px; }
+            .hero-content { text-align: center; }
+            .hero-chart-container { width: 150px; height: 150px; }
+            .card-main { grid-template-columns: 1fr; gap: 15px; text-align: center; }
+            .jc-stat { border-left: none; border-top: 1px solid #2d303a; padding-left: 0; padding-top: 10px; align-items: center; }
+            .jc-action { justify-content: center; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .health-box { grid-column: span 2; border-left: none; border-top: 1px solid #333; padding-top: 15px; }
+            .email-card { flex-direction: column; }
+            .ec-info { border-right: none; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px; width: 100%; }
+            .ec-metrics { width: 100%; flex-wrap: wrap; gap: 15px; }
+            .ec-chart { border-left: none; border-top: 1px solid #333; padding-left: 0; padding-top: 15px; margin-top: 15px; width: 100%; }
+            .control-bar { flex-direction: column; align-items: stretch; }
+            .filter-group { flex-direction: column; align-items: stretch; }
+            .search-wrapper input, .market-select { width: 100%; }
+            .global-stats-container { grid-template-columns: 1fr 1fr; }
+            .gs-card:last-child { grid-column: span 2; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 id="heroTitle" class="hero-title">Campaign Performance</h1>
+                <p id="heroSubtitle" class="hero-subtitle">Real-time intelligence for your Marketing Cloud Journeys</p>
+                <p id="heroNote" style="font-size: 14px; color: var(--accent); font-weight: 600; margin-top: 10px; border-left: 3px solid var(--accent); padding-left: 10px;">
+                    All data presented is demo/dummy data for illustration purposes.
+                </p>
+            </div>
+            <div class="hero-chart-container" id="heroChartContainer">
+                <div class="hero-chart-wrapper">
+                    <canvas id="globalChart"></canvas>
+                    <div class="hero-chart-center">
+                        <div class="total-label">Total Sent</div>
+                        <div class="total-value" id="chartCenterValue">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-bar">
+            <div class="stat-pill">
+                <div class="stat-val" id="journeyCount">0</div>
+                <div class="stat-lbl">Active Journeys</div>
+            </div>
+            <div class="filter-group">
+                <select id="marketFilter" class="market-select">
+                    <option value="All">All Markets</option>
+                </select>
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search Journeys...">
+                </div>
+                <button class="btn reset-btn" id="resetBtn">Reset All</button>
+                <button class="btn export-btn" id="exportBtn"><span>📥</span> Export</button>
+            </div>
+        </div>
+
+        <div class="global-stats-container" id="globalStatsBar">
+            <div class="gs-card" id="gs-sent-card"><div class="gs-val" id="g-sent">0</div><div class="gs-lbl">Total Sent</div></div>
+            <div class="gs-card" id="gs-opens-card"><div class="gs-val" id="g-opens">0</div><div class="gs-sub" id="g-open-rate">0.00%</div><div class="gs-lbl">Avg Open Rate</div></div>
+            <div class="gs-card" id="gs-clicks-card"><div class="gs-val" id="g-clicks">0</div><div class="gs-sub" id="g-click-rate">0.00%</div><div class="gs-lbl">Avg Click Rate</div></div>
+            <div class="gs-card" id="gs-bounces-card"><div class="gs-val" id="g-bounces">0</div><div class="gs-sub" id="g-bounce-rate">0.00%</div><div class="gs-lbl">Total Bounces</div></div>
+            <div class="gs-card" id="gs-unsubs-card"><div class="gs-val" id="g-unsubs">0</div><div class="gs-sub" id="g-unsub-rate">0.00%</div><div class="gs-lbl">Total Unsubs</div></div>
+        </div>
+
+        <div id="dashboardContent"></div>
+        <button class="load-more-btn" id="loadMoreBtn" style="display:none;">Load More Journeys</button>
+        <div class="no-data" id="noResultsMessage" style="display:none;">
+            <h3 id="noResultsTitle">No Matches Found</h3>
+            <p id="noResultsDesc">Adjust your filters to find what you are looking for.</p>
+        </div>
+
+        <div style="text-align:center; margin-top: 50px; color:#444; font-size: 11px; letter-spacing: 0.5px;">
+            <div style="text-transform: uppercase; margin-bottom: 5px;">Last Updated: Mar 16, 2026</div>
+            <div style="color:#555; font-size: 10px;">Data refreshes daily via scheduled automation</div>
+        </div>
+    </div>
+
+    
+
+    <script>
+    // ── DUMMY DATA ──
+    var rawData = [
+        { JourneyName: "Welcome Series - New Subscribers", VersionNumber: "1", Market: "US", StartDate: "2025-08-15", EndDate: "2025-12-31", TotalSent_J: "145200", UniqueOpens_J: "43560", UniqueClicks_J: "8712", TotalDelivered_J: "142100", DeliveryRate_J: "97.87", TotalBounces_J: "3100", TotalUnsubs_J: "290", EmailActivityName: "Welcome Email 1", EmailSubjectLine: "Welcome aboard! Here's your starter guide", EmailSenderName: "Acme Brand", EmailSenderEmail: "hello@acme.com", EmailTotalSent: "145200", EmailUniqueOpens: "50820", EmailUniqueOpenRate: "35.76", EmailUniqueClicks: "10164", EmailUniqueClickRate: "7.15", EmailTotalBounces: "1450", EmailBounceRate: "1.00", EmailTotalUnsubs: "145", EmailUnsubRate: "0.10", EmailOrder: "1" },
+        { JourneyName: "Welcome Series - New Subscribers", VersionNumber: "1", Market: "US", StartDate: "2025-08-15", EndDate: "2025-12-31", TotalSent_J: "145200", UniqueOpens_J: "43560", UniqueClicks_J: "8712", TotalDelivered_J: "142100", DeliveryRate_J: "97.87", TotalBounces_J: "3100", TotalUnsubs_J: "290", EmailActivityName: "Welcome Email 2 - Tips", EmailSubjectLine: "5 tips to get the most out of Acme", EmailSenderName: "Acme Brand", EmailSenderEmail: "hello@acme.com", EmailTotalSent: "130000", EmailUniqueOpens: "33800", EmailUniqueOpenRate: "26.00", EmailUniqueClicks: "6500", EmailUniqueClickRate: "5.00", EmailTotalBounces: "910", EmailBounceRate: "0.70", EmailTotalUnsubs: "91", EmailUnsubRate: "0.07", EmailOrder: "2" },
+        { JourneyName: "Welcome Series - New Subscribers", VersionNumber: "1", Market: "US", StartDate: "2025-08-15", EndDate: "2025-12-31", TotalSent_J: "145200", UniqueOpens_J: "43560", UniqueClicks_J: "8712", TotalDelivered_J: "142100", DeliveryRate_J: "97.87", TotalBounces_J: "3100", TotalUnsubs_J: "290", EmailActivityName: "Welcome Email 3 - Offer", EmailSubjectLine: "Your exclusive 20% off inside", EmailSenderName: "Acme Brand", EmailSenderEmail: "hello@acme.com", EmailTotalSent: "120000", EmailUniqueOpens: "28800", EmailUniqueOpenRate: "24.00", EmailUniqueClicks: "7200", EmailUniqueClickRate: "6.00", EmailTotalBounces: "720", EmailBounceRate: "0.60", EmailTotalUnsubs: "54", EmailUnsubRate: "0.05", EmailOrder: "3" },
+        { JourneyName: "Black Friday Promo Blast", VersionNumber: "1", Market: "US", StartDate: "2025-11-20", EndDate: "2025-11-30", TotalSent_J: "520000", UniqueOpens_J: "140400", UniqueClicks_J: "41600", TotalDelivered_J: "510000", DeliveryRate_J: "98.08", TotalBounces_J: "10000", TotalUnsubs_J: "1560", EmailActivityName: "BF Teaser", EmailSubjectLine: "Something BIG is coming...", EmailSenderName: "Acme Deals", EmailSenderEmail: "deals@acme.com", EmailTotalSent: "520000", EmailUniqueOpens: "166400", EmailUniqueOpenRate: "32.00", EmailUniqueClicks: "46800", EmailUniqueClickRate: "9.00", EmailTotalBounces: "5200", EmailBounceRate: "1.00", EmailTotalUnsubs: "780", EmailUnsubRate: "0.15", EmailOrder: "1" },
+        { JourneyName: "Black Friday Promo Blast", VersionNumber: "1", Market: "US", StartDate: "2025-11-20", EndDate: "2025-11-30", TotalSent_J: "520000", UniqueOpens_J: "140400", UniqueClicks_J: "41600", TotalDelivered_J: "510000", DeliveryRate_J: "98.08", TotalBounces_J: "10000", TotalUnsubs_J: "1560", EmailActivityName: "BF Main Event", EmailSubjectLine: "🔥 UP TO 60% OFF – Shop Now!", EmailSenderName: "Acme Deals", EmailSenderEmail: "deals@acme.com", EmailTotalSent: "510000", EmailUniqueOpens: "178500", EmailUniqueOpenRate: "35.00", EmailUniqueClicks: "56100", EmailUniqueClickRate: "11.00", EmailTotalBounces: "4590", EmailBounceRate: "0.90", EmailTotalUnsubs: "765", EmailUnsubRate: "0.15", EmailOrder: "2" },
+        { JourneyName: "Cart Abandonment Recovery", VersionNumber: "1", Market: "UK", StartDate: "2025-09-01", EndDate: null, TotalSent_J: "87300", UniqueOpens_J: "34920", UniqueClicks_J: "13095", TotalDelivered_J: "85600", DeliveryRate_J: "98.05", TotalBounces_J: "1700", TotalUnsubs_J: "87", EmailActivityName: "Cart Reminder 1hr", EmailSubjectLine: "You left something behind!", EmailSenderName: "Acme Store", EmailSenderEmail: "store@acme.com", EmailTotalSent: "87300", EmailUniqueOpens: "40557", EmailUniqueOpenRate: "46.46", EmailUniqueClicks: "15714", EmailUniqueClickRate: "18.00", EmailTotalBounces: "873", EmailBounceRate: "1.00", EmailTotalUnsubs: "44", EmailUnsubRate: "0.05", EmailOrder: "1" },
+        { JourneyName: "Cart Abandonment Recovery", VersionNumber: "1", Market: "UK", StartDate: "2025-09-01", EndDate: null, TotalSent_J: "87300", UniqueOpens_J: "34920", UniqueClicks_J: "13095", TotalDelivered_J: "85600", DeliveryRate_J: "98.05", TotalBounces_J: "1700", TotalUnsubs_J: "87", EmailActivityName: "Cart Reminder 24hr", EmailSubjectLine: "Still thinking it over? Here's 10% off", EmailSenderName: "Acme Store", EmailSenderEmail: "store@acme.com", EmailTotalSent: "65000", EmailUniqueOpens: "22750", EmailUniqueOpenRate: "35.00", EmailUniqueClicks: "9750", EmailUniqueClickRate: "15.00", EmailTotalBounces: "520", EmailBounceRate: "0.80", EmailTotalUnsubs: "33", EmailUnsubRate: "0.05", EmailOrder: "2" },
+        { JourneyName: "Monthly Newsletter - DE Edition", VersionNumber: "1", Market: "DE", StartDate: "2025-10-01", EndDate: "2026-03-01", TotalSent_J: "62000", UniqueOpens_J: "13640", UniqueClicks_J: "3100", TotalDelivered_J: "60500", DeliveryRate_J: "97.58", TotalBounces_J: "1500", TotalUnsubs_J: "310", EmailActivityName: "October Newsletter", EmailSubjectLine: "Oktoberausgabe: Neuigkeiten & Angebote", EmailSenderName: "Acme DE", EmailSenderEmail: "newsletter@acme.de", EmailTotalSent: "62000", EmailUniqueOpens: "13640", EmailUniqueOpenRate: "22.00", EmailUniqueClicks: "3100", EmailUniqueClickRate: "5.00", EmailTotalBounces: "1500", EmailBounceRate: "2.42", EmailTotalUnsubs: "310", EmailUnsubRate: "0.50", EmailOrder: "1" },
+        { JourneyName: "Re-Engagement Campaign", VersionNumber: "2", Market: "US", StartDate: "2025-10-15", EndDate: "2026-01-15", TotalSent_J: "210000", UniqueOpens_J: "25200", UniqueClicks_J: "4200", TotalDelivered_J: "200000", DeliveryRate_J: "95.24", TotalBounces_J: "10000", TotalUnsubs_J: "2100", EmailActivityName: "We Miss You", EmailSubjectLine: "It's been a while – come see what's new", EmailSenderName: "Acme Brand", EmailSenderEmail: "hello@acme.com", EmailTotalSent: "210000", EmailUniqueOpens: "29400", EmailUniqueOpenRate: "14.00", EmailUniqueClicks: "4620", EmailUniqueClickRate: "2.20", EmailTotalBounces: "6300", EmailBounceRate: "3.00", EmailTotalUnsubs: "1260", EmailUnsubRate: "0.60", EmailOrder: "1" },
+        { JourneyName: "Re-Engagement Campaign", VersionNumber: "2", Market: "US", StartDate: "2025-10-15", EndDate: "2026-01-15", TotalSent_J: "210000", UniqueOpens_J: "25200", UniqueClicks_J: "4200", TotalDelivered_J: "200000", DeliveryRate_J: "95.24", TotalBounces_J: "10000", TotalUnsubs_J: "2100", EmailActivityName: "Last Chance", EmailSubjectLine: "Final call: exclusive offer just for you", EmailSenderName: "Acme Brand", EmailSenderEmail: "hello@acme.com", EmailTotalSent: "180000", EmailUniqueOpens: "21600", EmailUniqueOpenRate: "12.00", EmailUniqueClicks: "3600", EmailUniqueClickRate: "2.00", EmailTotalBounces: "5400", EmailBounceRate: "3.00", EmailTotalUnsubs: "900", EmailUnsubRate: "0.50", EmailOrder: "2" },
+        { JourneyName: "Product Launch - Summer Line", VersionNumber: "1", Market: "UK", StartDate: "2025-08-01", EndDate: "2025-09-15", TotalSent_J: "98000", UniqueOpens_J: "30380", UniqueClicks_J: "7840", TotalDelivered_J: "96000", DeliveryRate_J: "97.96", TotalBounces_J: "2000", TotalUnsubs_J: "196", EmailActivityName: "Sneak Peek", EmailSubjectLine: "First look: our Summer collection drops soon", EmailSenderName: "Acme Fashion", EmailSenderEmail: "style@acme.co.uk", EmailTotalSent: "98000", EmailUniqueOpens: "34300", EmailUniqueOpenRate: "35.00", EmailUniqueClicks: "8820", EmailUniqueClickRate: "9.00", EmailTotalBounces: "980", EmailBounceRate: "1.00", EmailTotalUnsubs: "98", EmailUnsubRate: "0.10", EmailOrder: "1" },
+        { JourneyName: "Product Launch - Summer Line", VersionNumber: "1", Market: "UK", StartDate: "2025-08-01", EndDate: "2025-09-15", TotalSent_J: "98000", UniqueOpens_J: "30380", UniqueClicks_J: "7840", TotalDelivered_J: "96000", DeliveryRate_J: "97.96", TotalBounces_J: "2000", TotalUnsubs_J: "196", EmailActivityName: "Launch Day", EmailSubjectLine: "🌴 It's HERE – Shop the Summer Line now", EmailSenderName: "Acme Fashion", EmailSenderEmail: "style@acme.co.uk", EmailTotalSent: "96000", EmailUniqueOpens: "36480", EmailUniqueOpenRate: "38.00", EmailUniqueClicks: "11520", EmailUniqueClickRate: "12.00", EmailTotalBounces: "768", EmailBounceRate: "0.80", EmailTotalUnsubs: "96", EmailUnsubRate: "0.10", EmailOrder: "2" }
+    ];
+
+    // ── ENGINE ──
+    var allJourneys = [], filteredJourneys = [], displayedCount = 0, batchSize = 50, activeCardId = null, filterTimeout = null, globalChart = null;
+
+    var thresholds = { openRate: { good: 20, warning: 15, danger: 10 }, clickRate: { good: 5, warning: 3, danger: 2 }, bounceRate: { good: 2, warning: 3, danger: 5 }, unsubRate: { good: 0.2, warning: 0.3, danger: 0.5 } };
+    var formatNum = function(n) { return n ? parseInt(n).toLocaleString() : '0'; };
+    var formatRate = function(n) { return n ? parseFloat(n).toFixed(2) : '0.00'; };
+    var formatDate = function(d) { if (!d) return null; var dt = new Date(d); return isNaN(dt.getTime()) ? d : dt.toLocaleDateString("en-US", { month: 'short', day: 'numeric', year: 'numeric' }); };
+
+    function getRateClass(value, metric) {
+        var v = parseFloat(value) || 0; var t = thresholds[metric]; if (!t) return '';
+        if (metric === 'bounceRate' || metric === 'unsubRate') { return v <= t.good ? 'rate-good' : v <= t.warning ? 'rate-warning' : 'rate-danger'; }
+        else { return v >= t.good ? 'rate-good' : v >= t.warning ? 'rate-warning' : 'rate-danger'; }
+    }
+
+    function processData() {
+        if (!rawData || !rawData.length) return;
+        var grouped = {};
+        for (var i = 0; i < rawData.length; i++) {
+            var r = rawData[i], key = r.JourneyName + '|' + r.VersionNumber + '|' + r.Market;
+            if (!grouped[key]) {
+                var sent = parseFloat(r.TotalSent_J)||0, delivered = parseFloat(r.TotalDelivered_J)||0, opens = parseFloat(r.UniqueOpens_J)||0, clicks = parseFloat(r.UniqueClicks_J)||0, bounces = parseFloat(r.TotalBounces_J)||0, unsubs = parseFloat(r.TotalUnsubs_J)||0;
+                grouped[key] = { JourneyName: r.JourneyName, VersionNumber: r.VersionNumber, Market: r.Market, StartDate: r.StartDate, EndDate: r.EndDate, TotalSent_J: r.TotalSent_J, UniqueOpens_J: r.UniqueOpens_J, UniqueOpenRate_J: delivered > 0 ? ((opens/delivered)*100) : 0, UniqueClicks_J: r.UniqueClicks_J, UniqueClickRate_J: delivered > 0 ? ((clicks/delivered)*100) : 0, TotalDelivered_J: r.TotalDelivered_J, DeliveryRate_J: r.DeliveryRate_J, BounceRate_J: delivered > 0 ? ((bounces/delivered)*100) : 0, TotalBounces_J: r.TotalBounces_J, UnsubRate_J: delivered > 0 ? ((unsubs/delivered)*100) : 0, TotalUnsubs_J: r.TotalUnsubs_J, Emails: [], searchText: (r.JourneyName||'').toLowerCase() };
+            }
+            if (r.EmailActivityName) {
+                grouped[key].Emails.push({ ActivityName: r.EmailActivityName, SubjectLine: r.EmailSubjectLine, SenderName: r.EmailSenderName, SenderEmail: r.EmailSenderEmail, TotalSent: r.EmailTotalSent, UniqueOpens: r.EmailUniqueOpens, UniqueOpenRate: r.EmailUniqueOpenRate, UniqueClicks: r.EmailUniqueClicks, UniqueClickRate: r.EmailUniqueClickRate, TotalBounces: r.EmailTotalBounces, BounceRate: r.EmailBounceRate, TotalUnsubs: r.EmailTotalUnsubs, UnsubRate: r.EmailUnsubRate, EmailOrder: r.EmailOrder });
+                grouped[key].searchText += ' ' + (r.EmailActivityName||'').toLowerCase();
+            }
+        }
+        allJourneys = Object.keys(grouped).map(function(k) { return grouped[k]; });
+        allJourneys.sort(function(a,b) { var nA=(a.JourneyName||'').toUpperCase(), nB=(b.JourneyName||'').toUpperCase(); return nA < nB ? -1 : nA > nB ? 1 : (a.VersionNumber||0)-(b.VersionNumber||0); });
+        for (var j = 0; j < allJourneys.length; j++) allJourneys[j].Emails.sort(function(a,b){ return (a.EmailOrder||0)-(b.EmailOrder||0); });
+    }
+
+    function populateMarkets() {
+        var markets = {}; for (var i = 0; i < allJourneys.length; i++) { var m = allJourneys[i].Market; if (m) markets[m] = true; }
+        var sel = document.getElementById('marketFilter'), sorted = Object.keys(markets).sort();
+        for (var j = 0; j < sorted.length; j++) { var opt = document.createElement('option'); opt.value = sorted[j]; opt.text = sorted[j]; sel.appendChild(opt); }
+    }
+
+    function applyFilters() {
+        var search = document.getElementById('searchInput').value.toLowerCase();
+        var market = document.getElementById('marketFilter').value;
+        filteredJourneys = [];
+        for (var i = 0; i < allJourneys.length; i++) {
+            var j = allJourneys[i];
+            if ((market === 'All' || j.Market === market) && (!search || j.searchText.indexOf(search) !== -1)) filteredJourneys.push(j);
+        }
+        displayedCount = 0; activeCardId = null;
+        document.getElementById('dashboardContent').innerHTML = '';
+        loadMore(); updateGlobalStats(); updateGlobalChart();
+    }
+
+    function loadMore() {
+        var container = document.getElementById('dashboardContent');
+        var end = Math.min(displayedCount + batchSize, filteredJourneys.length);
+        var fragment = document.createDocumentFragment();
+        for (var i = displayedCount; i < end; i++) fragment.appendChild(createCard(filteredJourneys[i], i));
+        container.appendChild(fragment); displayedCount = end;
+        document.getElementById('journeyCount').textContent = filteredJourneys.length;
+        document.getElementById('loadMoreBtn').style.display = displayedCount < filteredJourneys.length ? 'block' : 'none';
+        document.getElementById('noResultsMessage').style.display = filteredJourneys.length === 0 ? 'block' : 'none';
+        document.getElementById('globalStatsBar').style.display = filteredJourneys.length > 0 ? 'grid' : 'none';
+    }
+
+    function createCard(j, idx) {
+        var card = document.createElement('div'); card.className = 'journey-card'; card.id = 'card-' + idx;
+        var openRC = getRateClass(j.UniqueOpenRate_J, 'openRate'), clickRC = getRateClass(j.UniqueClickRate_J, 'clickRate');
+        card.innerHTML = '<div class="card-main" id="cardMain-'+idx+'"><div class="jc-identity" style="margin-right:15px;"><h3>' + (j.JourneyName||'Unknown') + ' <span class="version-badge">v' + (j.VersionNumber||'1') + '</span><span class="market-badge">' + (j.Market||'Global') + '</span></h3><div class="jc-meta"><span>📅 ' + formatDate(j.StartDate) + ' - ' + (j.EndDate ? formatDate(j.EndDate) : 'Running') + '</span><span>•</span><span>📧 ' + j.Emails.length + ' Emails</span></div></div><div class="jc-stat"><div class="lbl">Total Sent</div><div class="val">' + formatNum(j.TotalSent_J) + '</div></div><div class="jc-stat"><div class="lbl">Unique Opens</div><div class="val">' + formatNum(j.UniqueOpens_J) + ' <span class="rate ' + openRC + '">(' + formatRate(j.UniqueOpenRate_J) + '%)</span></div></div><div class="jc-stat"><div class="lbl">Unique Clicks</div><div class="val">' + formatNum(j.UniqueClicks_J) + ' <span class="rate ' + clickRC + '">(' + formatRate(j.UniqueClickRate_J) + '%)</span></div></div><div class="jc-action"><div class="toggle-icon">▼</div></div></div><div class="card-details" id="details-' + idx + '"></div>';
+        return card;
+    }
+
+    function toggleCard(idx) {
+        var card = document.getElementById('card-' + idx), details = document.getElementById('details-' + idx);
+        if (activeCardId !== null && activeCardId !== idx) { var prev = document.getElementById('card-' + activeCardId); if (prev) prev.classList.remove('active'); }
+        if (card.classList.contains('active')) { card.classList.remove('active'); activeCardId = null; }
+        else { card.classList.add('active'); activeCardId = idx; if (!details.innerHTML) { details.innerHTML = buildDetails(filteredJourneys[idx], idx); initJourneyChart(idx); initEmailCharts(idx); } }
+    }
+
+    function buildDetails(j, idx) {
+        var oRC = getRateClass(j.UniqueOpenRate_J,'openRate'), cRC = getRateClass(j.UniqueClickRate_J,'clickRate'), dRC = getRateClass(j.DeliveryRate_J,'openRate'), bRC = getRateClass(j.BounceRate_J,'bounceRate'), uRC = getRateClass(j.UnsubRate_J,'unsubRate');
+        var html = '<div class="kpi-grid"><div class="kpi-box"><div class="num">'+formatNum(j.TotalSent_J)+'</div><div class="txt">Total Sent</div></div><div class="kpi-box"><div class="num">'+formatNum(j.TotalDelivered_J)+'</div><div class="sub '+dRC+'">'+formatRate(j.DeliveryRate_J)+'%</div><div class="txt">Delivery Rate</div></div><div class="kpi-box"><div class="num">'+formatNum(j.UniqueOpens_J)+'</div><div class="sub '+oRC+'">'+formatRate(j.UniqueOpenRate_J)+'%</div><div class="txt">Unique Opens</div></div><div class="kpi-box"><div class="num">'+formatNum(j.UniqueClicks_J)+'</div><div class="sub '+cRC+'">'+formatRate(j.UniqueClickRate_J)+'%</div><div class="txt">Unique Clicks</div></div><div class="health-box"><div class="risk-row"><span>Bounces</span><span class="risk-val '+bRC+'">'+formatNum(j.TotalBounces_J)+' ('+formatRate(j.BounceRate_J)+'%)</span></div><div class="risk-row"><span>Unsubs</span><span class="risk-val '+uRC+'">'+formatNum(j.TotalUnsubs_J)+' ('+formatRate(j.UnsubRate_J)+'%)</span></div></div></div>';
+        if (j.Emails.length > 1) html += '<div class="journey-chart-container"><h4>📈 Email Performance Trend</h4><div class="journey-chart-wrapper"><canvas id="journeyChart-'+idx+'"></canvas></div></div>';
+        html += '<div class="timeline-header">Email Performance</div><div class="timeline-container">';
+        for (var i = 0; i < j.Emails.length; i++) {
+            var e = j.Emails[i], eORC=getRateClass(e.UniqueOpenRate,'openRate'), eCRC=getRateClass(e.UniqueClickRate,'clickRate'), eBRC=getRateClass(e.BounceRate,'bounceRate'), eURC=getRateClass(e.UnsubRate,'unsubRate');
+            html += '<div class="timeline-item"><div class="t-line"><div class="t-dot"></div><div class="t-connector"></div></div><div class="email-card"><div class="ec-info"><div class="ec-name">'+(e.ActivityName||'N/A')+'</div><span class="ec-subject">'+(e.SubjectLine||'No Subject')+'</span><div class="sender-block"><div class="sb-row"><span class="icon">👤</span> '+(e.SenderName||'N/A')+'</div><div class="sb-row sb-email"><span class="icon">✉️</span> '+(e.SenderEmail||'N/A')+'</div></div></div><div class="ec-metrics"><div class="ec-stat"><span class="n">'+formatNum(e.TotalSent)+'</span><span class="l">Sent</span></div><div class="ec-stat"><span class="n">'+formatNum(e.UniqueOpens)+'</span><span class="r '+eORC+'">'+formatRate(e.UniqueOpenRate)+'%</span><span class="l">Open</span></div><div class="ec-stat"><span class="n">'+formatNum(e.UniqueClicks)+'</span><span class="r '+eCRC+'">'+formatRate(e.UniqueClickRate)+'%</span><span class="l">Click</span></div><div class="ec-stat risk"><span class="n">'+formatNum(e.TotalBounces)+'</span><span class="r '+eBRC+'">'+formatRate(e.BounceRate)+'%</span><span class="l">Bounce</span></div><div class="ec-stat risk"><span class="n">'+formatNum(e.TotalUnsubs)+'</span><span class="r '+eURC+'">'+formatRate(e.UnsubRate)+'%</span><span class="l">Unsub</span></div></div><div class="ec-chart"><div class="mini-chart-container"><canvas id="emailChart-'+idx+'-'+i+'"></canvas></div></div></div></div>';
+        }
+        html += '</div>'; return html;
+    }
+
+    function updateGlobalStats() {
+        var tSent=0,tDel=0,tO=0,tC=0,tB=0,tU=0;
+        for (var i=0;i<filteredJourneys.length;i++){var j=filteredJourneys[i];tSent+=parseInt(j.TotalSent_J||0);tDel+=parseInt(j.TotalDelivered_J||0);tO+=parseInt(j.UniqueOpens_J||0);tC+=parseInt(j.UniqueClicks_J||0);tB+=parseInt(j.TotalBounces_J||0);tU+=parseInt(j.TotalUnsubs_J||0);}
+        var rO=tDel>0?((tO/tDel)*100).toFixed(2):'0.00',rC=tDel>0?((tC/tDel)*100).toFixed(2):'0.00',rB=tDel>0?((tB/tDel)*100).toFixed(2):'0.00',rU=tDel>0?((tU/tDel)*100).toFixed(2):'0.00';
+        document.getElementById('g-sent').textContent=formatNum(tSent);document.getElementById('g-opens').textContent=formatNum(tO);document.getElementById('g-open-rate').textContent=rO+'%';document.getElementById('g-clicks').textContent=formatNum(tC);document.getElementById('g-click-rate').textContent=rC+'%';document.getElementById('g-bounces').textContent=formatNum(tB);document.getElementById('g-bounce-rate').textContent=rB+'%';document.getElementById('g-unsubs').textContent=formatNum(tU);document.getElementById('g-unsub-rate').textContent=rU+'%';document.getElementById('chartCenterValue').textContent=formatNum(tSent);
+        document.getElementById('gs-opens-card').className='gs-card '+getRateClass(rO,'openRate');document.getElementById('gs-clicks-card').className='gs-card '+getRateClass(rC,'clickRate');document.getElementById('gs-bounces-card').className='gs-card '+getRateClass(rB,'bounceRate');document.getElementById('gs-unsubs-card').className='gs-card '+getRateClass(rU,'unsubRate');
+    }
+
+    function updateGlobalChart() {
+        var ctx = document.getElementById('globalChart'); if (!ctx) return;
+        if (globalChart) globalChart.destroy();
+        var tDel=0,tO=0,tC=0,tB=0,tU=0;
+        for(var i=0;i<filteredJourneys.length;i++){var j=filteredJourneys[i];tDel+=parseInt(j.TotalDelivered_J||0);tO+=parseInt(j.UniqueOpens_J||0);tC+=parseInt(j.UniqueClicks_J||0);tB+=parseInt(j.TotalBounces_J||0);tU+=parseInt(j.TotalUnsubs_J||0);}
+        globalChart = new Chart(ctx, { type:'doughnut', data:{ labels:['Delivered','Opens','Clicks','Bounces','Unsubs'], datasets:[{ data:[tDel,tO,tC,tB,tU], backgroundColor:['#F47920','#2D3436','#636E72','#B2BEC3','#74B9FF'], borderColor:'#0f1014', borderWidth:3, hoverOffset:8 }] }, options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{display:false}, tooltip:{ backgroundColor:'rgba(24,25,30,0.95)', titleColor:'#fff', bodyColor:'#8b92a5', borderColor:'#2d303a', borderWidth:1, padding:12, callbacks:{ label:function(c){ var t=c.dataset.data.reduce(function(a,b){return a+b;},0); return c.label+': '+c.parsed.toLocaleString()+' ('+(t>0?((c.parsed/t)*100).toFixed(1):0)+'%)'; } } } } } });
+    }
+
+    function initJourneyChart(idx) {
+        var j = filteredJourneys[idx]; if (!j || j.Emails.length < 2) return;
+        var ctx = document.getElementById('journeyChart-'+idx); if (!ctx) return;
+        var labels=[],oRates=[],cRates=[];
+        for(var i=0;i<j.Emails.length;i++){labels.push('Email '+(i+1));oRates.push(parseFloat(j.Emails[i].UniqueOpenRate)||0);cRates.push(parseFloat(j.Emails[i].UniqueClickRate)||0);}
+        new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:'Open Rate %',data:oRates,borderColor:'#F47920',backgroundColor:'rgba(244,121,32,0.1)',fill:true,tension:0.4,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#F47920'},{label:'Click Rate %',data:cRates,borderColor:'#8b92a5',backgroundColor:'rgba(139,146,165,0.1)',fill:true,tension:0.4,pointRadius:4,pointHoverRadius:6,pointBackgroundColor:'#8b92a5'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{color:'#8b92a5',font:{size:11},padding:15,usePointStyle:true}},tooltip:{backgroundColor:'rgba(24,25,30,0.95)',titleColor:'#fff',bodyColor:'#8b92a5',borderColor:'#2d303a',borderWidth:1,padding:12}},scales:{x:{grid:{color:'rgba(45,48,58,0.5)',drawBorder:false},ticks:{color:'#8b92a5',font:{size:10}}},y:{grid:{color:'rgba(45,48,58,0.5)',drawBorder:false},ticks:{color:'#8b92a5',font:{size:10},callback:function(v){return v+'%';}},min:0}}}});
+    }
+
+    function initEmailCharts(idx) {
+        var j = filteredJourneys[idx]; if (!j) return;
+        for(var i=0;i<j.Emails.length;i++){
+            var e=j.Emails[i],ctx=document.getElementById('emailChart-'+idx+'-'+i); if(!ctx)continue;
+            new Chart(ctx,{type:'bar',data:{labels:['Opens','Clicks','Bounces'],datasets:[{data:[parseInt(e.UniqueOpens)||0,parseInt(e.UniqueClicks)||0,parseInt(e.TotalBounces)||0],backgroundColor:['#F47920','#A34E24','#5a3d2e'],borderRadius:3,barThickness:12}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(24,25,30,0.95)',titleColor:'#fff',bodyColor:'#8b92a5',callbacks:{label:function(c){return c.parsed.x.toLocaleString();}}}},scales:{x:{display:false},y:{grid:{display:false},ticks:{color:'#666',font:{size:9}}}}}});
+        }
+    }
+
+    function exportToCSV() {
+        if(!filteredJourneys.length){alert('No data');return;}
+        var rows=[['Journey Name','Version','Market','Start Date','End Date','Total Sent','Delivered','Delivery Rate','Opens','Open Rate','Clicks','Click Rate','Bounces','Bounce Rate','Unsubs','Unsub Rate'].join(',')];
+        for(var i=0;i<filteredJourneys.length;i++){var j=filteredJourneys[i];rows.push(['"'+(j.JourneyName||'')+'"',j.VersionNumber,j.Market,j.StartDate||'',j.EndDate||'',j.TotalSent_J,j.TotalDelivered_J,j.DeliveryRate_J,j.UniqueOpens_J,formatRate(j.UniqueOpenRate_J),j.UniqueClicks_J,formatRate(j.UniqueClickRate_J),j.TotalBounces_J,formatRate(j.BounceRate_J),j.TotalUnsubs_J,formatRate(j.UnsubRate_J)].join(','));}
+        var blob=new Blob(['\ufeff'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='Journey_Export.csv';link.style.display='none';document.body.appendChild(link);link.click();document.body.removeChild(link);
+    }
+
+    // ── INIT ──
+    processData();
+    populateMarkets();
+    applyFilters();
+
+    // ── EVENT LISTENERS ──
+    document.getElementById('marketFilter').addEventListener('change', applyFilters);
+    document.getElementById('searchInput').addEventListener('input', function(){ clearTimeout(filterTimeout); filterTimeout = setTimeout(applyFilters, 200); });
+    document.getElementById('resetBtn').addEventListener('click', function(){ document.getElementById('searchInput').value=''; document.getElementById('marketFilter').value='All'; applyFilters(); });
+    document.getElementById('exportBtn').addEventListener('click', exportToCSV);
+    document.getElementById('loadMoreBtn').addEventListener('click', loadMore);
+    document.getElementById('dashboardContent').addEventListener('click', function(e) {
+        var el = e.target;
+        while (el && el !== this) {
+            if (el.id && el.id.indexOf('cardMain-') === 0) {
+                var idx = parseInt(el.id.replace('cardMain-', ''));
+                toggleCard(idx);
+                return;
+            }
+            el = el.parentElement;
+        }
+    });
+
+    // ── EDITABLE SAVE ──
+    var editedElements = [];
+    var saveButton = document.getElementById('saveEditsButton');
+    function showSaveButton() { if (saveButton) saveButton.style.display = 'block'; }
+    function sendToParent(type, data) { window.parent.postMessage({ type: type, data: data }, '*'); }
+    function handleSaveEdits() { sendToParent('SAVE_EDITS', editedElements); if (saveButton) saveButton.style.display = 'none'; editedElements.length = 0; }
+    if (saveButton) saveButton.addEventListener('click', handleSaveEdits);
+    document.querySelectorAll('[contenteditable]').forEach(function(element) {
+        element.addEventListener('input', function(event) {
+            showSaveButton();
+            var existingIndex = editedElements.findIndex(function(el) { return el.id === event.target.id; });
+            var editData = { id: event.target.id, text: event.target.innerText };
+            if (existingIndex !== -1) editedElements[existingIndex] = editData;
+            else editedElements.push(editData);
+        });
+    });
+    </script>
+
+</body></html>
