@@ -1,0 +1,608 @@
+<html data-type="html" data-identifier="cd1b9e63-3c1e-49e6-ba0d-6ba0ab2088a5" data-title=" PDF2Email Converter — Agent Overview" data-version="1" width="1200" height="900"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.6; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #161b22; }
+  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+
+  .top-bar { background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%); padding: 0; position: sticky; top: 0; z-index: 100; }
+  .top-bar-inner { max-width: 1180px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .top-bar h1 { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+  .top-bar .badge { background: rgba(255,255,255,0.2); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 24px; }
+
+  .hero-section { background: linear-gradient(135deg, #161b22 0%, #1a2332 100%); border: 1px solid #30363d; border-radius: 12px; padding: 32px; margin-bottom: 24px; position: relative; overflow: hidden; }
+  .hero-section::before { content: ''; position: absolute; top: -50%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,102,0,0.06) 0%, transparent 70%); pointer-events: none; }
+  .hero-title { font-size: 28px; font-weight: 700; color: #f0f6fc; margin-bottom: 8px; }
+  .hero-desc { font-size: 15px; color: #8b949e; max-width: 800px; }
+  .hero-tags { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .hero-tag { background: #21262d; border: 1px solid #30363d; padding: 4px 12px; border-radius: 20px; font-size: 12px; color: #8b949e; }
+  .hero-tag.active { border-color: #ff6600; color: #ff8533; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 24px; transition: border-color 0.2s, transform 0.2s; }
+  .card:hover { border-color: #484f58; transform: translateY(-1px); }
+  .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .card-icon.orange { background: rgba(255,102,0,0.15); }
+  .card-icon.blue { background: rgba(56,139,253,0.15); }
+  .card-icon.green { background: rgba(63,185,80,0.15); }
+  .card-icon.purple { background: rgba(188,140,255,0.15); }
+  .card-icon.red { background: rgba(248,81,73,0.15); }
+  .card-icon.teal { background: rgba(63,185,170,0.15); }
+  .card-title { font-size: 16px; font-weight: 600; color: #f0f6fc; }
+  .card-subtitle { font-size: 12px; color: #8b949e; }
+
+  .config-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #21262d; }
+  .config-row:last-child { border-bottom: none; }
+  .config-label { font-size: 13px; color: #8b949e; }
+  .config-value { font-size: 13px; color: #f0f6fc; font-weight: 600; font-family: 'SF Mono', 'Cascadia Code', monospace; }
+  .config-value.highlight { color: #ff8533; }
+
+  .step-list { list-style: none; counter-reset: step-counter; }
+  .step-item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid #21262d; position: relative; }
+  .step-item:last-child { border-bottom: none; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: #21262d; border: 2px solid #30363d; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #8b949e; flex-shrink: 0; transition: all 0.3s; }
+  .step-item.active .step-num { background: #ff6600; border-color: #ff6600; color: #fff; }
+  .step-item.completed .step-num { background: #238636; border-color: #238636; color: #fff; }
+  .step-name { font-size: 14px; font-weight: 600; color: #f0f6fc; }
+  .step-type { font-size: 11px; color: #8b949e; background: #21262d; padding: 2px 8px; border-radius: 10px; margin-left: 8px; }
+  .step-desc { font-size: 12px; color: #8b949e; margin-top: 2px; }
+  .step-connector { position: absolute; left: 13px; top: 40px; bottom: -12px; width: 2px; background: #21262d; }
+  .step-item:last-child .step-connector { display: none; }
+
+  .memory-item { padding: 10px 14px; background: #21262d; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #ff6600; cursor: pointer; transition: background 0.2s; }
+  .memory-item:hover { background: #272d36; }
+  .memory-title { font-size: 13px; font-weight: 600; color: #f0f6fc; margin-bottom: 2px; }
+  .memory-preview { font-size: 12px; color: #8b949e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .memory-expanded { display: none; font-size: 12px; color: #8b949e; margin-top: 8px; line-height: 1.5; white-space: normal; }
+
+  .guardrail-item { padding: 10px 14px; background: #21262d; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #f85149; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: background 0.2s; }
+  .guardrail-item:hover { background: #272d36; }
+  .guardrail-icon { font-size: 14px; flex-shrink: 0; }
+  .guardrail-text { font-size: 13px; color: #f0f6fc; font-weight: 500; }
+  .guardrail-expanded { display: none; font-size: 12px; color: #8b949e; margin-top: 8px; padding-left: 24px; }
+
+  .dataset-card { background: #21262d; border-radius: 8px; padding: 16px; border: 1px solid #30363d; }
+  .dataset-name { font-size: 14px; font-weight: 600; color: #f0f6fc; margin-bottom: 4px; }
+  .dataset-type { display: inline-block; background: rgba(56,139,253,0.15); color: #58a6ff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-bottom: 8px; }
+  .dataset-desc { font-size: 12px; color: #8b949e; }
+
+  .section-title { font-size: 18px; font-weight: 700; color: #f0f6fc; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title .dot { width: 8px; height: 8px; border-radius: 50%; background: #ff6600; }
+
+  .stat-card { text-align: center; padding: 20px; }
+  .stat-num { font-size: 32px; font-weight: 800; color: #ff8533; font-family: 'SF Mono', monospace; }
+  .stat-label { font-size: 12px; color: #8b949e; margin-top: 4px; }
+
+  .persona-block { background: #21262d; border-radius: 8px; padding: 16px; font-size: 13px; color: #8b949e; border-left: 3px solid #bc8cff; }
+  .persona-block strong { color: #f0f6fc; }
+
+  .toggle-btn { background: none; border: none; color: #58a6ff; font-size: 12px; cursor: pointer; padding: 4px 0; }
+  .toggle-btn:hover { text-decoration: underline; }
+
+  .tab-bar { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 1px solid #30363d; }
+  .tab-btn { padding: 10px 20px; background: none; border: none; color: #8b949e; font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; font-family: inherit; }
+  .tab-btn.active { color: #f0f6fc; border-bottom-color: #ff6600; }
+  .tab-btn:hover { color: #f0f6fc; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .footer-bar { text-align: center; padding: 24px; color: #484f58; font-size: 12px; border-top: 1px solid #21262d; margin-top: 24px; }
+
+  .pulse { animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  .scroll-indicator { position: fixed; top: 0; left: 0; height: 3px; background: #ff6600; z-index: 999; transition: width 0.1s; width: 0%; }
+</style>
+</head>
+<body>
+
+<div class="scroll-indicator" id="scrollIndicator"></div>
+
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <h1 id="topTitle">⚡  PDF2Email Converter</h1>
+    <span class="badge">Agent Builder Pro</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero-section">
+    <h2 class="hero-title" id="heroTitle">PDF → Production-Ready HTML Email</h2>
+    <p class="hero-desc" id="heroDesc">Converts pharmaceutical PDF email briefs into 700px table-based, Outlook-compatible, fully responsive HTML emails for Veeva and SFMC deployment. Supports 30+ markets across MENA and APAC regions with zero content modification tolerance.</p>
+    <div class="hero-tags">
+      <span class="hero-tag active">Veeva</span>
+      <span class="hero-tag active">SFMC</span>
+      <span class="hero-tag">Outlook Compatible</span>
+      <span class="hero-tag">Table-Based</span>
+      <span class="hero-tag">700px</span>
+      <span class="hero-tag">WCAG 2.1 AA</span>
+      <span class="hero-tag">30+ Markets</span>
+      <span class="hero-tag">Zero Tolerance</span>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="grid-3" style="margin-bottom:24px;">
+    <div class="card stat-card">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Workflow Steps</div>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-num">10</div>
+      <div class="stat-label">Memories</div>
+    </div>
+    <div class="card stat-card">
+      <div class="stat-num">10</div>
+      <div class="stat-label">Guardrails</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="workflow">Workflow Steps</button>
+    <button class="tab-btn" data-tab="knowledge">Knowledge Base</button>
+    <button class="tab-btn" data-tab="memories">Memories</button>
+    <button class="tab-btn" data-tab="guardrails">Guardrails</button>
+  </div>
+
+  <!-- TAB: OVERVIEW -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="grid">
+      <!-- Model Config -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon orange">⚙️</div>
+          <div>
+            <div class="card-title">Model Configuration</div>
+            <div class="card-subtitle">Advanced Settings</div>
+          </div>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Model</span>
+          <span class="config-value highlight">Gemini 3.1 Pro</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Reasoning Level</span>
+          <span class="config-value">High</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Temperature</span>
+          <span class="config-value">0</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Top P</span>
+          <span class="config-value">0.95</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Top K</span>
+          <span class="config-value">40</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Role</span>
+          <span class="config-value">Expert</span>
+        </div>
+      </div>
+
+      <!-- Persona -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon purple">🧑‍💻</div>
+          <div>
+            <div class="card-title">Persona</div>
+            <div class="card-subtitle">Senior HTML Email Developer</div>
+          </div>
+        </div>
+        <div class="persona-block">
+          <strong>15+ years</strong> of experience building Outlook-compatible, WCAG-accessible, table-based HTML emails for <strong>Veeva</strong> and <strong>SFMC</strong> platforms. Methodical, precise, compliance-obsessed. Never guesses. Never assumes. Never generates content. Extracts, structures, and builds — nothing more.
+        </div>
+        <div style="margin-top: 14px;">
+          <div class="config-row">
+            <span class="config-label">Personality</span>
+            <span class="config-value">Precise &amp; Methodical</span>
+          </div>
+          <div class="config-row">
+            <span class="config-label">Communication</span>
+            <span class="config-value">Structured Steps</span>
+          </div>
+          <div class="config-row">
+            <span class="config-label">Expertise Areas</span>
+            <span class="config-value">7 Domains</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon green">🎯</div>
+          <div>
+            <div class="card-title">Mission</div>
+            <div class="card-subtitle">Core Objective</div>
+          </div>
+        </div>
+        <p id="missionText" style="font-size:13px; color:#8b949e;">Convert PDF email briefs into production-ready, mobile-responsive, 700px table-based HTML emails. Achieve exact content replication with zero modification while ensuring Outlook compatibility, platform compliance, and regional market rules.</p>
+      </div>
+
+      <!-- Critical Rules -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon red">🔒</div>
+          <div>
+            <div class="card-title">Critical Rules</div>
+            <div class="card-subtitle">Non-Negotiable Constraints</div>
+          </div>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Content Integrity</span>
+          <span class="config-value" style="color:#f85149;">12 Rules</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Technical Constraints</span>
+          <span class="config-value" style="color:#f85149;">12 Rules</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Tolerance Level</span>
+          <span class="config-value" style="color:#f85149;">0.00000%</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Layout Method</span>
+          <span class="config-value">Table-Only</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Email Width</span>
+          <span class="config-value">700px Fixed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: WORKFLOW -->
+  <div class="tab-content" id="tab-workflow">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon blue">📋</div>
+        <div>
+          <div class="card-title">Sequential Workflow</div>
+          <div class="card-subtitle">6 Steps — Execute in Order — User Confirmation Required</div>
+        </div>
+      </div>
+      <ul class="step-list">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-connector"></div>
+          <div>
+            <div><span class="step-name">Extract &amp; Classify</span><span class="step-type">Instruction</span></div>
+            <div class="step-desc">Extract all text verbatim from PDF. Detect language, market, email type. Identify sections, tokens, links, images. Present extraction summary for verification.....</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-connector"></div>
+          <div>
+            <div><span class="step-name">Verify &amp; Collect Inputs</span><span class="step-type">Instruction</span></div>
+            <div class="step-desc">Collect platform choice, theme color, survey style, CTA links, image URLs, material type, and footer requirements from user.....</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-connector"></div>
+          <div>
+            <div><span class="step-name">Content Mapping</span><span class="step-type">Instruction</span></div>
+            <div class="step-desc">Map verified content to email structure skeleton. Apply country-specific rules from Dataset. Present tree-structure content map for confirmation.....</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-connector"></div>
+          <div>
+            <div><span class="step-name">Generate HTML &amp; Insert Content</span><span class="step-type">Instruction</span></div>
+            <div class="step-desc">Build complete 700px table-based HTML with DOCTYPE, CSS reset, media queries, VML buttons, ghost tables. Insert all text verbatim with correct typography.....</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-connector"></div>
+          <div>
+            <div><span class="step-name">QA Validation</span><span class="step-type">Self Reflect</span></div>
+            <div class="step-desc">Comprehensive validation across 8 categories: Content, Structure, Images, Links, Tokens, Outlook, Regional, Accessibility. Fix all failures before delivery.....</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-connector"></div>
+          <div>
+            <div><span class="step-name">Deliver Final Output</span><span class="step-type">Instruction</span></div>
+            <div class="step-desc">Present complete validated HTML. Generate secondary platform version if requested. Include delivery summary with section counts, QA status, and next steps.....</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB: KNOWLEDGE BASE -->
+  <div class="tab-content" id="tab-knowledge">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon teal">📚</div>
+        <div>
+          <div class="card-title">Datasets (Sources)</div>
+          <div class="card-subtitle">Single Source of Truth</div>
+        </div>
+      </div>
+      <div class="dataset-card">
+        <div class="dataset-name"> PDF2Email Master Guidelines</div>
+        <span class="dataset-type">Context Window</span>
+        <p class="dataset-desc">Complete technical reference for converting pharmaceutical PDF email briefs into production-ready HTML emails. Contains HTML coding standards, email structure rules, Outlook compatibility patterns, responsive framework, Veeva and SFMC token references, superscript formulas, VML button patterns, accessibility standards, content integrity rules, and country-specific guidelines for 17 markets across MENA and APAC regions.....</p>
+        <div style="margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap;">
+          <span class="hero-tag">HTML Standards</span>
+          <span class="hero-tag">Outlook Patterns</span>
+          <span class="hero-tag">Veeva Tokens</span>
+          <span class="hero-tag">SFMC Tokens</span>
+          <span class="hero-tag">17 Markets</span>
+          <span class="hero-tag">VML Buttons</span>
+          <span class="hero-tag">Accessibility</span>
+          <span class="hero-tag">Superscript Formulas</span>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="config-row">
+          <span class="config-label">Dataset Usage Rule</span>
+          <span class="config-value">Always consult before generating HTML</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Override Policy</span>
+          <span class="config-value" style="color:#f85149;">Never override with training data</span>
+        </div>
+        <div class="config-row">
+          <span class="config-label">Fallback</span>
+          <span class="config-value">Ask user if rule not found</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: MEMORIES -->
+  <div class="tab-content" id="tab-memories">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon orange">🧠</div>
+        <div>
+          <div class="card-title">Agent Memories</div>
+          <div class="card-subtitle">10 persistent knowledge items — Click to expand</div>
+        </div>
+      </div>
+      <div id="memoriesList">
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">1. Email Width Standard</div>
+          <div class="memory-preview">700px fixed container, 660px content area, 20px side padding.....</div>
+          <div class="memory-expanded">The email width standard is ALWAYS 700px fixed. Content area is 660px (700px minus 20px left + 20px right padding). Media query breakpoint at max-width: 700px. Ghost tables use 660px for two-column areas.....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">2. Superscript Sizing Formula</div>
+          <div class="memory-preview">font-size = parent × 0.65, vertical-align = parent × 0.35, mso-text-raise required.....</div>
+          <div class="memory-expanded">Superscript font-size is ALWAYS relative to parent. Formula: font-size = parent × 0.65. line-height = same as font-size. vertical-align = parent × 0.35. mso-text-raise = same as vertical-align (REQUIRED for Outlook).....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">3. Table-Based Architecture</div>
+          <div class="memory-preview">Outer wrapper 100%, inner container 700px, MSO ghost tables for multi-column.....</div>
+          <div class="memory-expanded">Every email uses table-based layout only. Outer wrapper table (100% width) → inner container (700px, class="full"). Multi-column requires MSO ghost tables with align="left" and align="right".....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">4. VML Button Requirements</div>
+          <div class="memory-preview">Bulletproof pattern mandatory for all CTAs, w:anchorlock, stroke="false".....</div>
+          <div class="memory-expanded">ALL CTA buttons must use VML bulletproof pattern. w:anchorlock mandatory. center tag mandatory. stroke="false" mandatory. href on BOTH v:roundrect AND a tag. MENA border-radius: 30px, default: 4px.....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">5. Platform Token Distinction</div>
+          <div class="memory-preview">Veeva: {{tokenName}} | SFMC: %%tokenName%% | Vietnam name order exception.....</div>
+          <div class="memory-expanded">Veeva uses double curly braces {{tokenName}}. SFMC uses double percent %%tokenName%%. Vietnam SFMC exception: name order is %%Title%% %%LastName%% %%FirstName%%.....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">6. Outlook Mandatory Properties</div>
+          <div class="memory-preview">mso-line-height-rule:exactly, mso-text-raise, PixelsPerInch 96.....</div>
+          <div class="memory-expanded">Every email must include mso-line-height-rule:exactly on all line-heights, mso-table-lspace:0pt / mso-table-rspace:0pt on all tables, mso-text-raise on superscripts, PixelsPerInch 96.....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">7. Country Detection Priority</div>
+          <div class="memory-preview">Header text → Language → Footer address → Approval code prefix → Token locale.....</div>
+          <div class="memory-expanded">Detection signals in order: 1) Header text, 2) Language, 3) Footer company address, 4) Approval code prefix (PM-PK, PM-EG, PM-TR), 5) Token locale variant, 6) URLs with country codes.....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">8. MENA vs APAC Differences</div>
+          <div class="memory-preview">MENA: 30px CTA radius, 8px image radius | APAC: 4px default, country exceptions.....</div>
+          <div class="memory-expanded">MENA: CTA radius 30px, image radius 8px (Veeva), dynamic signature mandatory. APAC: CTA radius 4px default, Philippines 4 CSAT options, Vietnam star pattern, India WhatsApp mandatory.....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">9. Post-Body Section Rules</div>
+          <div class="memory-preview">Order: Footnotes → References → PI → Safety → Adverse Events. 12px/18px, dividers.....</div>
+          <div class="memory-expanded">After CSAT survey in exact order: Footnotes, References, Prescribing Info, Safety Info, Adverse Events. All 12px/18px, light grey bg. 1px divider after each section. Turkey/Gulf: unclickable references.....</div>
+        </div>
+        <div class="memory-item" data-expandable="">
+          <div class="memory-title">10. Image Handling Rules</div>
+          <div class="memory-preview">Always src="placeholder.png", width+height as attributes AND inline, class="fluid".....</div>
+          <div class="memory-expanded">ALL images use src="placeholder.png". Width/height as BOTH HTML attributes and inline CSS. display:block; border:0;. Content images need class="fluid". Alt text under 125 chars for informative.....</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: GUARDRAILS -->
+  <div class="tab-content" id="tab-guardrails">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon red">🛡️</div>
+        <div>
+          <div class="card-title">Guardrails</div>
+          <div class="card-subtitle">10 active guardrails — Click to expand</div>
+        </div>
+      </div>
+      <div id="guardrailsList">
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No Content Modification</div>
+            <div class="guardrail-expanded">Never modify, rephrase, paraphrase, summarize, or rewrite any text from uploaded PDF. Pharmaceutical content where 0.00001% error is unacceptable.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No Content Generation</div>
+            <div class="guardrail-expanded">Never generate placeholder copy, filler text, lorem ipsum, or any text not in source PDF. If expected content is missing, ask the user.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No Medical Advice</div>
+            <div class="guardrail-expanded">Never provide medical advice, drug recommendations, dosage information, or clinical opinions. Respond with scope limitation message.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No Color Assumptions</div>
+            <div class="guardrail-expanded">Never assume or suggest color hex codes. All colors must come from user or PDF. Never reference brand color database.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No Div-Based HTML</div>
+            <div class="guardrail-expanded">Never use div, section, header, footer, article, nav, flexbox, CSS grid, float, or position. Table-based layout only.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No Workflow Step Skipping</div>
+            <div class="guardrail-expanded">Never skip workflow steps or jump to HTML generation without extraction, verification, input collection, and mapping. Full workflow mandatory.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">Scope Limitation</div>
+            <div class="guardrail-expanded">Only converts PDF email briefs to HTML emails for Veeva/SFMC. No website dev, app dev, general coding, marketing strategy, or unrelated topics.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No CSS Shorthand</div>
+            <div class="guardrail-expanded">Never use CSS shorthand in inline styles. Always longhand: padding-top, padding-right, padding-bottom, padding-left. Outlook incompatible.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No URL Modification</div>
+            <div class="guardrail-expanded">Never truncate, modify, or simplify URLs. Preserve complete URLs with all parameters, UTM tags, tracking codes, tokens, anchors.....</div>
+          </div>
+        </div>
+        <div class="guardrail-item" data-expandable="">
+          <span class="guardrail-icon">🚫</span>
+          <div>
+            <div class="guardrail-text">No JavaScript / Prohibited Tech</div>
+            <div class="guardrail-expanded">Never include JavaScript, external CSS, form elements, video/audio embeds without fallback, CSS custom properties, or calc() in emails.....</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-header">
+        <div class="card-icon green">✅</div>
+        <div>
+          <div class="card-title">Learning Settings</div>
+          <div class="card-subtitle">Feedback &amp; Improvement</div>
+        </div>
+      </div>
+      <div class="config-row">
+        <span class="config-label">User Feedback</span>
+        <span class="config-value" style="color:#3fb950;">Enabled</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+     PDF2Email Converter — Agent Builder Pro — v1.0 — Gemini 3.1 Pro
+  </div>
+</div>
+
+
+
+
+
+<script>
+  // Tab Navigation
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tabBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var tabId = btn.getAttribute('data-tab');
+      document.querySelectorAll('.tab-content').forEach(function(tc) { tc.classList.remove('active'); });
+      var targetTab = document.getElementById('tab-' + tabId);
+      if (targetTab) targetTab.classList.add('active');
+    });
+  });
+
+  // Expandable Memory & Guardrail Items
+  document.querySelectorAll('[data-expandable]').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var expanded = item.querySelector('.memory-expanded, .guardrail-expanded');
+      if (expanded) {
+        if (expanded.style.display === 'block') {
+          expanded.style.display = 'none';
+        } else {
+          expanded.style.display = 'block';
+        }
+      }
+    });
+  });
+
+  // Scroll Indicator
+  window.addEventListener('scroll', function() {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var scrollPercent = (scrollTop / docHeight) * 100;
+    var indicator = document.getElementById('scrollIndicator');
+    if (indicator) indicator.style.width = scrollPercent + '%';
+  });
+
+  // Animate step numbers on workflow tab view
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var steps = entry.target.querySelectorAll('.step-item');
+        steps.forEach(function(step, i) {
+          setTimeout(function() {
+            step.querySelector('.step-num').style.background = '#ff6600';
+            step.querySelector('.step-num').style.borderColor = '#ff6600';
+            step.querySelector('.step-num').style.color = '#fff';
+          }, i * 200);
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  var workflowTab = document.getElementById('tab-workflow');
+  if (workflowTab) observer.observe(workflowTab);
+</script>
+
+
+</body></html>
