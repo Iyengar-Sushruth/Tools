@@ -1,0 +1,464 @@
+<html data-type="html" data-identifier="f7a2c1d9-4e3b-48a7-9c5f-2d8e6b1a3f50" data-title="Omni Query Agent — Agent Overview" data-version="1" width="1200" height="900"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:#0a0f1a;color:#cbd5e1;line-height:1.6}
+::-webkit-scrollbar{width:7px}
+::-webkit-scrollbar-track{background:#0f1629}
+::-webkit-scrollbar-thumb{background:#1e293b;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#334155}
+
+.scroll-ind{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#0ea5e9,#38bdf8,#7dd3fc);z-index:999;width:0%;transition:width 0.1s}
+
+.topbar{background:linear-gradient(135deg,#0369a1 0%,#0284c7 40%,#0ea5e9 100%);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(14,165,233,0.25)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar h1{font-size:17px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.topbar-badges{display:flex;gap:8px}
+.bdg{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
+.bdg-pro{background:rgba(255,255,255,0.18);color:#fff}
+.bdg-sql{background:rgba(56,189,248,0.2);color:#bae6fd;border:1px solid rgba(56,189,248,0.3)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:24px}
+
+.hero{background:linear-gradient(145deg,#0f1629 0%,#0c1a2e 50%,#0f1629 100%);border:1px solid #1e293b;border-radius:14px;padding:34px;margin-bottom:22px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-40px;width:320px;height:320px;background:radial-gradient(circle,rgba(14,165,233,0.07) 0%,transparent 70%);pointer-events:none}
+.hero-ey{font-size:11px;font-weight:700;color:#38bdf8;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:6px}
+.hero h2{font-size:28px;font-weight:800;color:#f1f5f9;margin-bottom:10px;line-height:1.2}
+.hero h2 em{font-style:normal;background:linear-gradient(90deg,#38bdf8,#7dd3fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:14px;color:#94a3b8;max-width:800px}
+.hero-tags{display:flex;gap:7px;margin-top:16px;flex-wrap:wrap}
+.ht{background:#1e293b;border:1px solid #334155;padding:3px 11px;border-radius:18px;font-size:11px;color:#94a3b8;transition:all 0.2s}
+.ht.lit{border-color:#0ea5e9;color:#7dd3fc;background:rgba(14,165,233,0.08)}
+
+.srow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+.sbox{background:#0f1629;border:1px solid #1e293b;border-radius:10px;padding:16px;text-align:center;transition:border-color 0.2s}
+.sbox:hover{border-color:#334155}
+.sn{font-size:26px;font-weight:800;font-family:'SF Mono','Cascadia Code',monospace}
+.sn.sky{color:#38bdf8}
+.sn.em{color:#34d399}
+.sn.amb{color:#fbbf24}
+.sn.ros{color:#fb7185}
+.sn.vio{color:#a78bfa}
+.sl{font-size:10px;color:#64748b;margin-top:3px;text-transform:uppercase;letter-spacing:0.5px}
+
+.tabs{display:flex;gap:0;border-bottom:1px solid #1e293b;margin-bottom:18px;overflow-x:auto}
+.tbtn{padding:9px 18px;background:none;border:none;color:#64748b;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;font-family:inherit;white-space:nowrap}
+.tbtn.on{color:#f1f5f9;border-bottom-color:#0ea5e9}
+.tbtn:hover{color:#cbd5e1}
+.tp{display:none}.tp.on{display:block}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:18px}
+
+.cd{background:#0f1629;border:1px solid #1e293b;border-radius:10px;padding:20px;transition:border-color 0.2s,transform 0.15s}
+.cd:hover{border-color:#334155;transform:translateY(-1px)}
+.cd-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cd-i{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.i-sky{background:rgba(14,165,233,0.12)}
+.i-em{background:rgba(16,185,129,0.12)}
+.i-amb{background:rgba(245,158,11,0.12)}
+.i-ros{background:rgba(244,63,94,0.12)}
+.i-vio{background:rgba(139,92,246,0.12)}
+.i-cyn{background:rgba(34,211,238,0.12)}
+.cd-t{font-size:14px;font-weight:600;color:#f1f5f9}
+.cd-s{font-size:11px;color:#64748b}
+
+.cr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #162032}
+.cr:last-child{border-bottom:none}
+.cl{font-size:12px;color:#64748b}
+.cv{font-size:12px;color:#f1f5f9;font-weight:600;font-family:'SF Mono','Cascadia Code',monospace}
+.cv.ac{color:#38bdf8}
+.cv.ok{color:#34d399}
+.cv.wr{color:#fb7185}
+
+.camp-card{background:#162032;border-radius:9px;padding:14px 16px;margin-bottom:9px;border-left:3px solid #0ea5e9;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:12px}
+.camp-card:hover{background:#1e293b}
+.camp-num{width:28px;height:28px;border-radius:50%;background:rgba(14,165,233,0.15);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#38bdf8;flex-shrink:0}
+.camp-name{font-size:13px;font-weight:600;color:#f1f5f9}
+.camp-desc{font-size:11px;color:#64748b;margin-top:2px}
+
+/* Pipeline */
+.pipe{position:relative;padding-left:26px}
+.pipe-line{position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#0ea5e9 0%,#1e293b 100%)}
+.pe{position:relative;padding:12px 0 12px 18px;border-bottom:1px solid #162032}
+.pe:last-child{border-bottom:none}
+.pe-dot{position:absolute;left:-20px;top:16px;width:11px;height:11px;border-radius:50%;border:2px solid #334155;background:#0f1629;z-index:2;transition:all 0.3s}
+.pe.glow .pe-dot{background:#0ea5e9;border-color:#38bdf8;box-shadow:0 0 8px rgba(14,165,233,0.4)}
+.pe-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.pe-name{font-size:13px;font-weight:600;color:#f1f5f9}
+.pe-tag{font-size:10px;padding:2px 7px;border-radius:9px;font-weight:600}
+.pe-tag.ins{background:rgba(14,165,233,0.12);color:#38bdf8}
+.pe-tag.ref{background:rgba(245,158,11,0.12);color:#fbbf24}
+.pe-mdl{font-size:10px;padding:2px 7px;border-radius:9px;background:rgba(14,165,233,0.08);color:#7dd3fc;border:1px solid rgba(14,165,233,0.15)}
+.pe-desc{font-size:11px;color:#64748b;margin-top:3px}
+.pe-cfg{display:flex;gap:10px;margin-top:5px;flex-wrap:wrap}
+.pe-cfg span{font-size:10px;color:#475569;font-family:'SF Mono',monospace}
+
+.ds-card{background:#162032;border-radius:9px;padding:15px;border:1px solid #1e293b;margin-bottom:10px}
+.ds-nm{font-size:13px;font-weight:600;color:#f1f5f9;margin-bottom:3px}
+.ds-tp{display:inline-block;background:rgba(34,211,238,0.1);color:#22d3ee;padding:2px 8px;border-radius:9px;font-size:10px;font-weight:600;margin-bottom:6px}
+.ds-dc{font-size:11px;color:#64748b}
+
+.mi{padding:9px 12px;background:#162032;border-radius:7px;margin-bottom:7px;border-left:3px solid #0ea5e9;cursor:pointer;transition:background 0.2s}
+.mi:hover{background:#1e293b}
+.mi-n{font-size:10px;font-weight:700;color:#38bdf8;margin-right:5px}
+.mi-t{font-size:12px;font-weight:600;color:#f1f5f9}
+.mi-p{font-size:11px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.mi-f{display:none;font-size:11px;color:#94a3b8;margin-top:7px;line-height:1.5;white-space:normal;padding-top:7px;border-top:1px solid #1e293b}
+
+.gi{padding:9px 12px;background:#162032;border-radius:7px;margin-bottom:7px;border-left:3px solid #f43f5e;cursor:pointer;transition:background 0.2s;display:flex;align-items:flex-start;gap:9px}
+.gi:hover{background:#1e293b}
+.gi-ic{font-size:12px;flex-shrink:0;margin-top:1px}
+.gi-t{font-size:12px;font-weight:600;color:#f1f5f9}
+.gi-f{display:none;font-size:11px;color:#94a3b8;margin-top:7px;line-height:1.5;white-space:normal;padding-top:7px;border-top:1px solid #1e293b}
+
+.bu-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.bu-chip{background:#162032;border:1px solid #1e293b;padding:3px 10px;border-radius:6px;font-size:10px;color:#94a3b8;font-family:'SF Mono',monospace;transition:all 0.15s;cursor:default}
+.bu-chip:hover{border-color:#0ea5e9;color:#38bdf8}
+
+.flow-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:12px}
+.flow-box{background:#162032;border:1px solid #1e293b;border-radius:8px;padding:8px 14px;font-size:11px;color:#94a3b8;text-align:center;min-width:90px}
+.flow-box strong{display:block;color:#f1f5f9;font-size:12px;margin-bottom:2px}
+.flow-arr{color:#334155;font-size:16px}
+
+.qa-tbl{width:100%;border-collapse:separate;border-spacing:0 4px;margin-top:10px}
+.qa-tbl td{padding:8px 12px;font-size:11px;background:#162032}
+.qa-tbl td:first-child{border-radius:6px 0 0 6px;color:#94a3b8;width:180px}
+.qa-tbl td:nth-child(2){font-weight:600}
+.qa-tbl td:last-child{border-radius:0 6px 6px 0;color:#64748b;font-style:italic}
+.qa-ow{color:#fbbf24}
+.qa-up{color:#34d399}
+
+.footer{text-align:center;padding:26px;color:#334155;font-size:11px;border-top:1px solid #162032;margin-top:22px}
+</style>
+</head>
+<body>
+
+<div class="scroll-ind" id="scrollInd"></div>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <h1 id="topTitle">🔍 Omni Query Agent</h1>
+    <div class="topbar-badges">
+      <span class="bdg bdg-pro">Agent Builder Pro</span>
+      <span class="bdg bdg-sql">SQL Query Engine</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-ey">Salesforce Marketing Cloud</div>
+    <h2 id="heroTitle">Precise Campaign Queries. <em>Zero Guesswork.</em></h2>
+    <p id="heroDesc">Generate precise SQL queries for Email Engagement, WhatsApp Single Send, and Rep to Digital campaigns. Strictly dataset-driven — never invents, assumes, or hallucinates queries. Supports 26 Business Units with conditional logic, day exclusion calculations, and platform-specific configurations.</p>
+    <div class="hero-tags">
+      <span class="ht lit">Email Engagement</span>
+      <span class="ht lit">WhatsApp Single Send</span>
+      <span class="ht lit">Rep to Digital</span>
+      <span class="ht">26 Business Units</span>
+      <span class="ht">Gemini 3.1 Pro</span>
+      <span class="ht">Context Window RAG</span>
+      <span class="ht">5-Step Pipeline</span>
+      <span class="ht">Zero Hallucination</span>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="srow">
+    <div class="sbox"><div class="sn sky">5</div><div class="sl">Pipeline Steps</div></div>
+    <div class="sbox"><div class="sn em">3</div><div class="sl">Datasets</div></div>
+    <div class="sbox"><div class="sn amb">18</div><div class="sl">Memories</div></div>
+    <div class="sbox"><div class="sn ros">11</div><div class="sl">Guardrails</div></div>
+    <div class="sbox"><div class="sn vio">26</div><div class="sl">Business Units</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" id="tabBar">
+    <button class="tbtn on" data-tab="overview">Overview</button>
+    <button class="tbtn" data-tab="pipeline">Pipeline</button>
+    <button class="tbtn" data-tab="campaigns">Campaign Types</button>
+    <button class="tbtn" data-tab="datasets">Knowledge Base</button>
+    <button class="tbtn" data-tab="memories">Memories</button>
+    <button class="tbtn" data-tab="guardrails">Guardrails</button>
+  </div>
+
+  <!-- TAB: OVERVIEW -->
+  <div class="tp on" id="tab-overview">
+    <div class="g2">
+      <div class="cd">
+        <div class="cd-h"><div class="cd-i i-sky">⚙️</div><div><div class="cd-t">Model &amp; Configuration</div><div class="cd-s">Optimized for Precision</div></div></div>
+        <div class="cr"><span class="cl">Primary Model</span><span class="cv ac">Gemini 3.1 Pro</span></div>
+        <div class="cr"><span class="cl">Reasoning Level</span><span class="cv">High</span></div>
+        <div class="cr"><span class="cl">Temperature</span><span class="cv">Predictable (0)</span></div>
+        <div class="cr"><span class="cl">Top P</span><span class="cv">0.2</span></div>
+        <div class="cr"><span class="cl">Top K</span><span class="cv">5</span></div>
+        <div class="cr"><span class="cl">Role</span><span class="cv">Expert</span></div>
+        <div class="cr"><span class="cl">Step Models</span><span class="cv ac">Gemini 3.1 Pro + 2.5 Flash</span></div>
+      </div>
+
+      <div class="cd">
+        <div class="cd-h"><div class="cd-i i-vio">🎯</div><div><div class="cd-t">Persona &amp; Mission</div><div class="cd-s">Campaign Query Generator Specialist</div></div></div>
+        <div style="background:#162032;border-radius:7px;padding:12px;font-size:12px;color:#94a3b8;border-left:3px solid #a78bfa;margin-bottom:12px">
+          <strong style="color:#f1f5f9">Professional, precise, and methodical.</strong> Asks clarifying questions when needed. Confirms inputs before generating. Strictly adheres to datasets — <strong style="color:#fb7185">never invents, assumes, or hallucinates queries</strong>.....</div>
+        <div class="cr"><span class="cl">Core Principle</span><span class="cv wr">Zero Hallucination</span></div>
+        <div class="cr"><span class="cl">Modification Scope</span><span class="cv">Placeholder Replacement Only</span></div>
+        <div class="cr"><span class="cl">Validation</span><span class="cv ok">4-Check Gate</span></div>
+      </div>
+
+      <!-- Query Action Rules -->
+      <div class="cd">
+        <div class="cd-h"><div class="cd-i i-amb">📝</div><div><div class="cd-t">Query Action Rules</div><div class="cd-s">Per Campaign Type</div></div></div>
+        <table class="qa-tbl">
+          <tbody><tr><td>Email Engagement</td><td><span class="qa-ow">1st: Overwrite</span></td><td>Rest: Update</td></tr>
+          <tr><td>WhatsApp Single Send</td><td><span class="qa-ow">1st: Overwrite</span></td><td>Rest: Update</td></tr>
+          <tr><td>Rep to Digital</td><td><span class="qa-up">ALL: Update</span></td><td>No Overwrite ever</td></tr>
+        </tbody></table>
+        <div class="cr" style="margin-top:10px"><span class="cl">Automation Name</span><span class="cv ac">Must match Target DE</span></div>
+      </div>
+
+      <!-- BU Coverage -->
+      <div class="cd">
+        <div class="cd-h"><div class="cd-i i-em">🌍</div><div><div class="cd-t">Business Unit Coverage</div><div class="cd-s">26 Markets Supported</div></div></div>
+        <div class="bu-grid">
+          <span class="bu-chip">DZ</span><span class="bu-chip">AR</span><span class="bu-chip">CL</span><span class="bu-chip">CO</span><span class="bu-chip">CR</span><span class="bu-chip">DO</span><span class="bu-chip">EC</span><span class="bu-chip">EG</span><span class="bu-chip">SV</span><span class="bu-chip">GT</span><span class="bu-chip">XG</span><span class="bu-chip">HN</span><span class="bu-chip">ID</span><span class="bu-chip">JM</span><span class="bu-chip">MY</span><span class="bu-chip">MX</span><span class="bu-chip">MA</span><span class="bu-chip">PK</span><span class="bu-chip">PA</span><span class="bu-chip">PE</span><span class="bu-chip">PH</span><span class="bu-chip">SA</span><span class="bu-chip">TH</span><span class="bu-chip">TT</span><span class="bu-chip">TR</span><span class="bu-chip">VN</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workflow Overview -->
+    <div class="cd">
+      <div class="cd-h"><div class="cd-i i-cyn">⚡</div><div><div class="cd-t">End-to-End Flow</div><div class="cd-s">Sequential pipeline with validation gate</div></div></div>
+      <div class="flow-row">
+        <div class="flow-box"><strong>Select</strong>Campaign Type</div><span class="flow-arr">→</span>
+        <div class="flow-box"><strong>Collect</strong>User Inputs</div><span class="flow-arr">→</span>
+        <div class="flow-box"><strong>Generate</strong>SQL Queries</div><span class="flow-arr">→</span>
+        <div class="flow-box"><strong>Validate</strong>5-Point QA</div><span class="flow-arr">→</span>
+        <div class="flow-box"><strong>Deliver</strong>Final Output</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: PIPELINE -->
+  <div class="tp" id="tab-pipeline">
+    <div class="cd">
+      <div class="cd-h"><div class="cd-i i-sky">📋</div><div><div class="cd-t">5-Step Sequential Pipeline</div><div class="cd-s">Each step uses the optimal model and configuration</div></div></div>
+      <div class="pipe" id="pipeTrack">
+        <div class="pipe-line"></div>
+
+        <div class="pe" data-idx="0">
+          <div class="pe-dot"></div>
+          <div>
+            <div class="pe-head"><span class="pe-name">1. Campaign Type Selection</span><span class="pe-tag ins">Instruction</span><span class="pe-mdl">Gemini 2.5 Flash</span></div>
+            <div class="pe-desc">Greet user, present 3 campaign options, validate selection, confirm before proceeding. Accepts multiple input formats (number, name, abbreviation).....</div>
+            <div class="pe-cfg"><span>Temp: 0</span><span>Top P: 0.1</span><span>Top K: 3</span><span>Reasoning: Minimal</span></div>
+          </div>
+        </div>
+
+        <div class="pe" data-idx="1">
+          <div class="pe-dot"></div>
+          <div>
+            <div class="pe-head"><span class="pe-name">2. Input Collection</span><span class="pe-tag ins">Instruction</span><span class="pe-mdl">Gemini 3.1 Pro</span></div>
+            <div class="pe-desc">Collect all required inputs sequentially based on campaign type. Validate each input. Handle conditional paths (segmentation, sub-types, day exclusions). Display confirmation summary.....</div>
+            <div class="pe-cfg"><span>Temp: 0</span><span>Top P: 0.2</span><span>Top K: 5</span><span>Reasoning: High</span></div>
+          </div>
+        </div>
+
+        <div class="pe" data-idx="2">
+          <div class="pe-dot"></div>
+          <div>
+            <div class="pe-head"><span class="pe-name">3. Query Generation</span><span class="pe-tag ins">Instruction</span><span class="pe-mdl">Gemini 3.1 Pro</span></div>
+            <div class="pe-desc">Retrieve templates from Datasets by BU + Campaign Type. Replace placeholders with user inputs. Apply conditional logic for query inclusion/exclusion. Calculate day additions.....</div>
+            <div class="pe-cfg"><span>Temp: 0</span><span>Top P: 0.1</span><span>Top K: 5</span><span>Reasoning: High</span></div>
+          </div>
+        </div>
+
+        <div class="pe" data-idx="3">
+          <div class="pe-dot"></div>
+          <div>
+            <div class="pe-head"><span class="pe-name">4. Query Validation</span><span class="pe-tag ref">Self Reflect</span><span class="pe-mdl">Gemini 3.1 Pro</span></div>
+            <div class="pe-desc">5-check validation gate: Placeholder Replacement, Conditional Logic, Calculations, Query Count, Dataset Adherence. Fix and revalidate if any check fails.....</div>
+            <div class="pe-cfg"><span>Temp: 0</span><span>Top P: 0.1</span><span>Top K: 5</span><span>Reasoning: High</span></div>
+          </div>
+        </div>
+
+        <div class="pe" data-idx="4">
+          <div class="pe-dot"></div>
+          <div>
+            <div class="pe-head"><span class="pe-name">5. Final Output &amp; Closing</span><span class="pe-tag ins">Instruction</span><span class="pe-mdl">Gemini 2.5 Flash</span></div>
+            <div class="pe-desc">Present validated queries in clean format with Target DE, Query Action, purpose. Include/Exclude summary table. Offer next steps: Modify, New Campaign, New BU, Done.....</div>
+            <div class="pe-cfg"><span>Temp: 0</span><span>Top P: 0.1</span><span>Top K: 3</span><span>Reasoning: Minimal</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: CAMPAIGNS -->
+  <div class="tp" id="tab-campaigns">
+    <div class="g2">
+      <!-- Email Engagement -->
+      <div class="cd">
+        <div class="cd-h"><div class="cd-i i-sky">📧</div><div><div class="cd-t">Email Engagement</div><div class="cd-s">Campaign Type 1</div></div></div>
+        <div class="cr"><span class="cl">Alias</span><span class="cv">EE</span></div>
+        <div class="cr"><span class="cl">Flat File Pattern</span><span class="cv ac">{BU}_P_EE_{BRAND}_{DATE}_FlatFile</span></div>
+        <div class="cr"><span class="cl">DE Pattern</span><span class="cv">{BU}_P_EE_{BRAND}_{DATE}</span></div>
+        <div class="cr"><span class="cl">1st Query Action</span><span class="cv" style="color:#fbbf24">Overwrite</span></div>
+        <div class="cr"><span class="cl">Segmentation</span><span class="cv">Specialty / Flat File / Entire Optin</span></div>
+        <div style="margin-top:10px;font-size:11px;color:#64748b">
+          <strong style="color:#94a3b8">Required Inputs:</strong> BU, Brand, Send Out Date, Segmentation Basis.....</div>
+      </div>
+
+      <!-- WhatsApp -->
+      <div class="cd">
+        <div class="cd-h"><div class="cd-i i-em">💬</div><div><div class="cd-t">WhatsApp Single Send</div><div class="cd-s">Campaign Type 2</div></div></div>
+        <div class="cr"><span class="cl">Alias</span><span class="cv">WA</span></div>
+        <div class="cr"><span class="cl">Flat File Pattern</span><span class="cv ac">{BU}_P_WA_{BRAND}_{DATE}_FlatFile</span></div>
+        <div class="cr"><span class="cl">1st Query Action</span><span class="cv" style="color:#fbbf24">Overwrite</span></div>
+        <div class="cr"><span class="cl">Conditional Queries</span><span class="cv">EncodedMobileNumber, OptOutSuffix</span></div>
+        <div style="margin-top:10px;font-size:11px;color:#64748b">
+          <strong style="color:#94a3b8">Optout Link:</strong> If template has optout link → include encoding + suffix queries.....</div>
+      </div>
+
+      <!-- Rep to Digital -->
+      <div class="cd" style="grid-column:1/3">
+        <div class="cd-h"><div class="cd-i i-vio">🔁</div><div><div class="cd-t">Rep to Digital</div><div class="cd-s">Campaign Type 3 — Most Complex</div></div></div>
+        <div class="g2" style="margin-bottom:0">
+          <div>
+            <div class="cr"><span class="cl">Alias</span><span class="cv">R2D</span></div>
+            <div class="cr"><span class="cl">Query Action</span><span class="cv ok">ALL: Update</span></div>
+            <div class="cr"><span class="cl">Max Emails in Journey</span><span class="cv">4</span></div>
+            <div class="cr"><span class="cl">DATEDIFF Sign</span><span class="cv wr">Always Negative</span></div>
+            <div class="cr"><span class="cl">Sub-types</span><span class="cv">4 Scenarios</span></div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:#f1f5f9;margin-bottom:8px">Sub-type Matrix</div>
+            <div style="font-size:11px;color:#64748b;line-height:1.7">
+              <strong style="color:#38bdf8">1.</strong> 1:1 Email only → RepEmailCondition...<br>
+              <strong style="color:#38bdf8">2.</strong> Product Metrics only → ProductMetrics + SetRejected...<br>
+              <strong style="color:#38bdf8">3.</strong> Both → All conditional queries...<br>
+              <strong style="color:#38bdf8">4.</strong> Neither → Base queries + optional Flat File join.....
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:11px;color:#64748b">
+          <strong style="color:#94a3b8">Optional Filters:</strong> Specialty, CurrentRating, Slide Duration, Day Exclusion (with dynamic CASE/WHEN calculation).....</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: DATASETS -->
+  <div class="tp" id="tab-datasets">
+    <div class="cd">
+      <div class="cd-h"><div class="cd-i i-cyn">📚</div><div><div class="cd-t">Knowledge Base — 3 Datasets</div><div class="cd-s">All using Context Window mode</div></div></div>
+
+      <div class="ds-card">
+        <div class="ds-nm">Email Engagement Queries</div>
+        <span class="ds-tp">Context Window</span>
+        <div class="ds-dc">Contains all queries for Email Engagement campaigns across all Business Units. Retrieve queries only from the section matching the user-selected BU.....</div>
+      </div>
+
+      <div class="ds-card">
+        <div class="ds-nm">WhatsApp Single Send Queries</div>
+        <span class="ds-tp">Context Window</span>
+        <div class="ds-dc">Contains all queries for WhatsApp Single Send campaigns across all Business Units. Retrieve queries only from the section matching the user-selected BU.....</div>
+      </div>
+
+      <div class="ds-card">
+        <div class="ds-nm">Rep to Digital Queries</div>
+        <span class="ds-tp">Context Window</span>
+        <div class="ds-dc">Contains all queries for Rep to Digital campaigns across all Business Units. Retrieve queries only from the section matching the user-selected BU.....</div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="cr"><span class="cl">Retrieval Strategy</span><span class="cv ac">BU + Campaign Type Lookup</span></div>
+        <div class="cr"><span class="cl">Override Policy</span><span class="cv wr">Never override with training data</span></div>
+        <div class="cr"><span class="cl">Fallback</span><span class="cv">Inform user template not found</span></div>
+        <div class="cr"><span class="cl">Modification Scope</span><span class="cv">Placeholder replacement only</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: MEMORIES -->
+  <div class="tp" id="tab-memories">
+    <div class="cd">
+      <div class="cd-h"><div class="cd-i i-sky">🧠</div><div><div class="cd-t">Agent Memories</div><div class="cd-s">18 persistent rules — Click to expand</div></div></div>
+      <div id="memList">
+        <div class="mi" data-ex=""><div><span class="mi-n">01</span><span class="mi-t">Accuracy Over Speed</span></div><div class="mi-p">Primary purpose is quick, accurate, precise SQL queries. Accuracy more important than speed.....</div><div class="mi-f">Never sacrifice correctness for faster responses. Precision is the core mandate.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">02</span><span class="mi-t">Three Campaign Types Only</span></div><div class="mi-p">Support exactly: Email Engagement, WhatsApp Single Send, Rep to Digital. All templates in Datasets.....</div><div class="mi-f">Retrieve and use only these templates from Datasets. No other campaign types supported.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">03</span><span class="mi-t">EE Flat File Naming</span></div><div class="mi-p">{BU}_P_EE_{BRAND}_{SENDOUTDATE}_FlatFile — e.g., AR_P_EE_TRELEGY_05062025_FlatFile.....</div><div class="mi-f">Strict naming convention. BU code + P + EE + Brand (uppercase) + Date (DDMMYYYY) + FlatFile.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">04</span><span class="mi-t">DE Naming (No FlatFile Suffix)</span></div><div class="mi-p">Data Extension follows same pattern without _FlatFile suffix.....</div><div class="mi-f">Example: AR_P_EE_TRELEGY_05062025 or AR_P_WA_TRELEGY_05062025.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">05</span><span class="mi-t">EE Segmentation Options</span></div><div class="mi-p">Three ways: Specialty values, Flat File join (Veeva ID/MDMID), or entire Optin DE.....</div><div class="mi-f">Each segmentation path produces different query structures. Must ask user which one.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">06</span><span class="mi-t">WA Optout Conditional Queries</span></div><div class="mi-p">EncodedMobileNumber + OptOutSuffix only if template has optout link.....</div><div class="mi-f">Always ask user about optout link before generating queries. Include or exclude based on answer.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">07</span><span class="mi-t">R2D Sub-type Query Matrix</span></div><div class="mi-p">Sub-type 1: RepEmailCondition. Sub-type 2: ProductMetrics trio. Sub-type 3: All.....</div><div class="mi-f">Sub-type determines which conditional queries to include/exclude from output.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">08</span><span class="mi-t">R2D CalculateDayOf Logic</span></div><div class="mi-p">Number of emails → number of CalculateDayOf queries. Max 4 emails = 4 queries.....</div><div class="mi-f">1 email = 1 query, 2 = 2, 3 = 3, 4 = 4. Only included when Day Exclusion = Yes.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">09</span><span class="mi-t">Day Addition Calculation</span></div><div class="mi-p">Base days + excluded day count. E.g., 2 days + 3 excluded = 5 in DATEADD.....</div><div class="mi-f">For each excluded day, calculate days to add to reach next valid non-excluded day. Dynamic CASE/WHEN.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">10</span><span class="mi-t">DATEDIFF Always Negative</span></div><div class="mi-p">User provides 2 → becomes -2 in ProfilesEmailsCallDetailsSlidesJoin query.....</div><div class="mi-f">Sign conversion is mandatory. Never use positive value in the DATEDIFF clause.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">11</span><span class="mi-t">Brand UPPERCASE Mandatory</span></div><div class="mi-p">Brand names must always be converted to UPPERCASE before insertion.....</div><div class="mi-f">Send Out Date must be DDMMYYYY with exactly 8 digits. Both validated before generation.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">12</span><span class="mi-t">Never Generate From Own Knowledge</span></div><div class="mi-p">Every query must come directly from Datasets. If template not found, inform user.....</div><div class="mi-f">Zero tolerance for invented queries. Dataset is the single source of truth.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">13</span><span class="mi-t">CurrentRating Optional</span></div><div class="mi-p">AND (P.CurrentRating IN ('A','B','',' ') OR P.CurrentRating IS NULL) — only if user requests.....</div><div class="mi-f">Never added by default. Must explicitly ask user. Include only on confirmation.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">14</span><span class="mi-t">R2D Sub-type 4 Flat File Option</span></div><div class="mi-p">Optional mass email on behalf of Rep using Flat File. FF name: {BU}_P_R2D_{BRAND}_{DATE}_FF.....</div><div class="mi-f">Only for Sub-type 4. Join on VeevaID or MDMID. Adds condition to ProfilesEmailsCallDetailsSlidesJoin.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">15</span><span class="mi-t">Dynamic Day Exclusion Calc</span></div><div class="mi-p">For each excluded day, calculate days to add to reach next valid day. Only excluded days get WHEN clauses.....</div><div class="mi-f">General rule: identify excluded days, find next valid day, calculate offset for each. Non-excluded days pass through unchanged.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">16</span><span class="mi-t">R2D Sub-type 4 Flat File Naming</span></div><div class="mi-p">{BU}_P_R2D_{BRAND}_{SENDOUTDATE}_FF. Join on VeevaID or MDMID.....</div><div class="mi-f">Example: AR_P_R2D_AREXVY_02092025_FF. Only applicable for Sub-type 4 with Flat File join.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">17</span><span class="mi-t">Slide Duration Optional</span></div><div class="mi-p">{SLIDE_DURATION_MIN} is optional. If No, remove entire condition block. Not a missing placeholder.....</div><div class="mi-f">Never flag removed optional section as error. Never trigger REDO_STEP for intentional removal.....</div></div>
+        <div class="mi" data-ex=""><div><span class="mi-n">18</span><span class="mi-t">Automation Config Rules</span></div><div class="mi-p">Automation name = Target DE name. EE/WA: 1st=Overwrite, rest=Update. R2D: ALL=Update.....</div><div class="mi-f">Always display Target DE and Query Action for each query. Automation name must match Target DE.....</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: GUARDRAILS -->
+  <div class="tp" id="tab-guardrails">
+    <div class="cd">
+      <div class="cd-h"><div class="cd-i i-ros">🛡️</div><div><div class="cd-t">Guardrails</div><div class="cd-s">11 active guardrails — Click to expand</div></div></div>
+      <div id="guardList">
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">No Query Invention</div><div class="gi-f">Never generate, invent, or create SQL not present in Datasets. If template missing, inform user.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">No Logic Modification</div><div class="gi-f">Never modify query logic, structure, syntax, table names, column names beyond placeholder replacement.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">Three Campaign Types Only</div><div class="gi-f">Only Email Engagement, WhatsApp Single Send, Rep to Digital. Reject other campaign type requests.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">Stay On Topic</div><div class="gi-f">Do not answer questions unrelated to campaign query generation. Redirect to tool purpose.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">No Input Assumptions</div><div class="gi-f">Never assume or guess input values. Ask for missing Brand, BU, Date, or other mandatory fields.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">No Unknown BU Queries</div><div class="gi-f">Do not provide queries for Business Units not in Datasets. Inform user BU not available.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">No Cross-Campaign Mixing</div><div class="gi-f">Never combine or merge queries from different campaign types. Each type isolated.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">No Input Skipping</div><div class="gi-f">All required inputs must be collected and confirmed before generating any queries.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">CurrentRating Not Default</div><div class="gi-f">Never add CurrentRating filter unless user explicitly confirms. Never by default.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">R2D Sub-type 4 Flat File Not Default</div><div class="gi-f">Flat file join condition only when user confirms mass email on behalf of Rep.....</div></div></div>
+        <div class="gi" data-ex=""><span class="gi-ic">⛔</span><div><div class="gi-t">Correct Query Actions Always</div><div class="gi-f">EE/WA: 1st=Overwrite, rest=Update. R2D: ALL=Update. Never Overwrite for R2D. Never Overwrite after 1st for EE/WA.....</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Omni Query Agent — Gemini 3.1 Pro — SFMC Campaign Query Engine — Agent Builder Pro</div>
+</div>
+
+
+
+
+
+<script>
+// Tabs
+document.querySelectorAll('.tbtn').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tbtn').forEach(function(x){x.classList.remove('on')});b.classList.add('on');var t=b.getAttribute('data-tab');document.querySelectorAll('.tp').forEach(function(p){p.classList.remove('on')});var tgt=document.getElementById('tab-'+t);if(tgt)tgt.classList.add('on');if(t==='pipeline')animPipe()})});
+
+// Expand
+document.querySelectorAll('[data-ex]').forEach(function(el){el.addEventListener('click',function(){var f=el.querySelector('.mi-f,.gi-f');if(f)f.style.display=f.style.display==='block'?'none':'block'})});
+
+// Scroll
+window.addEventListener('scroll',function(){var st=window.pageYOffset||document.documentElement.scrollTop;var dh=document.documentElement.scrollHeight-document.documentElement.clientHeight;var p=dh>0?(st/dh)*100:0;var bar=document.getElementById('scrollInd');if(bar)bar.style.width=p+'%'});
+
+// Pipeline anim
+function animPipe(){var steps=document.querySelectorAll('.pe');steps.forEach(function(s,i){s.classList.remove('glow');setTimeout(function(){s.classList.add('glow')},i*200)})}
+
+// Auto-anim on first view
+var pObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){animPipe();pObs.unobserve(e.target)}})},{threshold:0.2});
+var pTab=document.getElementById('tab-pipeline');if(pTab)pObs.observe(pTab);
+
+// BU chip hover animation
+document.querySelectorAll('.bu-chip').forEach(function(c){
+  c.addEventListener('mouseenter',function(){c.style.transform='scale(1.1)';c.style.zIndex='5'});
+  c.addEventListener('mouseleave',function(){c.style.transform='scale(1)';c.style.zIndex='1'});
+});
+</script>
+
+
+</body></html>
